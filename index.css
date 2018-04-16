@@ -1,0 +1,28 @@
+*{padding:0; margin:0;}
+h2{text-align: center; letter-spacing: 10px;}
+li{list-style: none;}
+
+.main-game{padding-top: 30px; width: 90%; height: 550px; margin:0 auto;}
+
+#map{width: 600px; height: 520px; display: block; float: left; margin-left: 27%;}
+#map tbody td{font-size: 30px; font-weight: bold; width: 40px; height: 40px; border:3px black solid; text-align: center;}
+
+.test-function{display: inline-block; margin:30px; width: 300px; height: 60px;}
+.test-function li{text-align: center; margin: 5px 20px; line-height: 30px;  height:30px; width:50px; border:2px solid gainsboro;}
+
+
+#stat{margin: auto; width: 90%;}
+#total-player{margin-left: 42%; display: inline-block; width: 100px;}
+#total-player span{font-size: 1.2em; font-weight: bold;}
+#score-board{text-align: center; display: inline-block; width: 100px; }
+#score-board span{font-size: 1.2em; font-weight: bold;}
+
+.color-select{margin: 20px auto; font-size: 30px; border-collapse:collapse;}
+.color-select tbody td{margin: 0 10px; width: 40px; height: 40px; border:3px black solid; text-align: center;}
+.now-select{border-spacing: 0px 10px; }
+
+.green{background-color:greenyellow;}
+.red{background-color: red;}
+.blue{background-color: dodgerblue;}
+.red-border{background-color: red;}
+.blue-border{background-color: blue;}
