@@ -3,7 +3,7 @@ var handCard = function(canvas){
     var f = [281, 380, 479, 579, 679, 779, 879];
     var td = $('.handcard td');
     var rect = canvas.getBoundingClientRect(); 
-    
+
     td.mouseenter(function(){
         var tot = $(this);
         var i = tot.index();
@@ -25,7 +25,39 @@ var handCard = function(canvas){
     
 };
 
-var map = {animate: function(){
+var drag = {
+    mx: 0, my: 0,
+    width: 77, height: 120,
+    draw: function(){
+        main.context.beginPath();
+        main.context.drawImage(cardImage[0], drag.mx, drag.my, drag.width, drag.height);
+        main.context.closePath();
+    },
+    animate: function(){
+        var rect = main.canvas.getBoundingClientRect(); 
+        console.log(drag.mx + ' ' + drag.my);
 
-}
+        $('.game-div').mousedown(function(e){
+            drag.mx = e.clientX - rect.left -36;
+            drag.my = e.clientY - rect.top - 60;
+            //console.log(drag.mx + ' ' + drag.my);
+            main.context.beginPath();
+            main.context.drawImage(cardImage[0], drag.mx, drag.my, drag.width, drag.height);
+            main.context.closePath();
+
+            $('.game-div').mousemove(function(e){
+                main.context.clearRect(drag.mx, drag.my, drag.width, drag.height);
+                drag.mx = e.clientX - rect.left -36;
+                drag.my = e.clientY - rect.top - 60;
+                //console.log(drag.mx + ' ' + drag.my);
+                drag.draw();
+            });
+
+            $('.game-div').mouseup(function(){
+                main.context.clearRect(drag.mx, drag.my, drag.width, drag.height);
+                $('.game-div').off('mousemove');
+                $('.game-div').off('mouseup');
+            });  
+        });
+    }
 };

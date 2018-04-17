@@ -26,14 +26,16 @@ var main = function(){
         //alert(1);
         context.drawImage(cardImage[0], 0, 0, 77, 120);
         handCard(canvas);
-        game.start();
+        //game.start();
+        drag.animate();
     }
     else{
         //alert(2);
         Loader.onload = function(){
             context.drawImage(cardImage[0], 0, 0, 77, 120);
             handCard(canvas);
-            game.start();
+            //game.start();
+            drag.animate();
         };
     }
 };
