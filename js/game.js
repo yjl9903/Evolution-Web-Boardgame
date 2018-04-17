@@ -1,5 +1,5 @@
 var game = {
-strar: function(){
+start: function(){
     alert(1);
     game.offsetLeft = 0;
     game.ended = false;
@@ -8,7 +8,7 @@ strar: function(){
 },
 animate: function(){
     game.offsetLeft++;
-    main.context.drawImage(cardImage[0], game.offsetLeft, 0);
+    main.context.drawImage(cardImage[0], game.offsetLeft, 0, 77, 120);
     
     if (game.ended)
         game.animationFrame = window.requestAnimationFrame(game.animate, main.canvas);
