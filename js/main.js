@@ -3,6 +3,8 @@ var cardImage = new Array(10);
 var main = function(){
     main.canvas = $('.game-canvas')[0];
     main.context = main.canvas.getContext('2d');
+    main.canvas2 = $('.game-canvas2')[0];
+    main.context2 = main.canvas2.getContext('2d');
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     
