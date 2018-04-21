@@ -43,6 +43,69 @@
     }
 };*/
 
-function textEnter(){
-    
+function textEnter(content, locX, locY, width, font, mode){
+    main.textContext.font = font + "px Microsoft YaHei";
+    main.textContext.textAlign = "center";
+    var sum = 0, flag = true, dy = 50;
+    var rgba = "rgba(60, 60, 60, "
+
+    //0：淡入，1：淡出，3：向上淡入，4：向上淡出
+    if (mode === 1)
+    {
+        sum = 1;
+        (function animate1(){
+            main.textContext.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
+            main.textContext.fillStyle = rgba + sum + ")";
+            main.textContext.fillText(content, locX, locY);
+            if (sum > 0)
+            {
+                sum -= 0.02;
+                window.requestAnimationFrame(animate1, main.textCanvas);
+            }
+        }());
+    }
+    else if (mode === 0)
+    {
+        (function animate0(){
+            main.textContext.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
+            main.textContext.fillStyle = rgba + sum + ")";
+            main.textContext.fillText(content, locX, locY);
+            if (sum < 1)
+            {
+                sum += 0.02;
+                window.requestAnimationFrame(animate0, main.textCanvas);
+            }
+        }());
+    }
+    else if (mode === 4)
+    {
+        sum = 1;
+        dy = 0;
+        (function animate4(){
+            main.textContext.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
+            main.textContext.fillStyle = rgba + sum + ")";
+            dy -= 1;
+            main.textContext.fillText(content, locX, locY + dy);
+            if (sum > 0)
+            {
+                sum -= 0.02;
+                window.requestAnimationFrame(animate4, main.textCanvas);
+            }
+        }());
+    }
+    else if (mode === 3)
+    {
+        //alert(1);
+        (function animate3(){
+            main.textContext.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
+            main.textContext.fillStyle = rgba + sum + ")";
+            dy -= 1;
+            main.textContext.fillText(content, locX, locY + dy);
+            if (sum < 1)
+            {
+                sum += 0.02;
+                window.requestAnimationFrame(animate3, main.textCanvas);
+            }
+        }());
+    }
 };

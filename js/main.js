@@ -7,6 +7,8 @@ var main = function(){
     main.context = main.canvas.getContext('2d');
     main.canvas2 = $('.game-canvas2')[0];
     main.context2 = main.canvas2.getContext('2d');
+    main.textCanvas = $('.text-canvas')[0];
+    main.textContext = main.textCanvas.getContext('2d');
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     
@@ -35,10 +37,13 @@ var main = function(){
     
     //alert(Loader.loadedCount + ' ' + Loader.totalCount);
     
-    //context.clearRect(0, 0, 1200, 1200);
-    //context.fillStyle = '#dddddd';
-    //context.fillRect(0, 0, 100, 100);
+    //main.textContext.clearRect(0, 0, 1200, 1200);
+    //main.textContext.font = "100px Arial";
+    //main.textContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    //main.textContext.fillText('1234', 300, 300);
+    //main.textContext.fillRect(0, 0, 100, 100);
     //cardImage[0].onload = function(){context.drawImage(cardImage[0], 0, 0, 77, 120);}
+    //textEnter("1111111", 300, 300, 100, 50, 3);
 
 
     if (Loader.loaded){

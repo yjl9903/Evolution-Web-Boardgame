@@ -1,10 +1,23 @@
 var game = function(){
+    var curText;
+    var playerNum = 2;
     game.now = 0;
     game.first = 0;
     game.deck;
+    game.check = new Array(4);
+    game.rest = playerNum;
     game.p;
-    game.step = new Array(function(){
+    
+    for (var i = 0; i < playerNum; i++)
+        game.check[i] = 0;
 
+    game.step = new Array(function(){
+        game.p[game.now].showHand();
+        curText = '玩家 ' + game.now + ' 正在进行回合...';
+        textEnter(curText, 500, 530, 2000, 30, 3);
+        handCardCmd(1);
+        
+        
     }, 
     function(){
 
@@ -13,14 +26,24 @@ var game = function(){
 
     });
 
+    game.switch = function(){
+        var p = game.now + 1;
+        while (game.check[p % playerNum])
+            p++;
+        game.now = p % playerNum;
+        textEnter(curText, 500, 530, 2000, 30, 4);
+        curText = '玩家 ' + game.now + ' 正在进行回合...';
+        textEnter(curText, 500, 530, 2000, 30, 3);
+    };
+
     game.set = function(){
         game.deck = CardDeck.shuffle();
-        var playerNum = 2;
         game.p = new Array(playerNum);
         for (var i = 0; i < playerNum; i++)
         {
             game.p[i] = new Player();
             game.p[i].hand.size = 0;
+            game.p[i].ownAnimal.size = 0;
         }
         for (var i = 0; i < playerNum * 6; i++)
         {
@@ -29,10 +52,10 @@ var game = function(){
             game.p[i % playerNum].handState[Math.floor(i / playerNum)] = 1;
             //console.log(Math.floor(i / playerNum));
         }
-        game.p[0].showHand();
-        
-        handCardCmd();
-        game.step[0];
+        $('.next-turn').click(function(){
+            game.switch();
+        });
+        game.step[0]();
     };
 };
 
