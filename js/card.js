@@ -27,6 +27,35 @@ var CardDeck = function(){
 };
 
 var card = function(){
+
+};
+
+var AnimalList = function(){
+    AnimalList.nameList = new Array('rabbit', 'rabbit');
+    AnimalList.image = new Array(10);
+};
+
+function Animal(tot, x, y){
+    this.locX = x;
+    this.locY = y;;
+    this.width = 90;
+    this.height = 90;
+    this.type = 0;
+    this.father = tot;
+    this.ability = new Array(0);
+    this.food = 1;
+    this.totFood = 0;
     
+    this.meat = false;  //食肉
+    this.rob = false;  //劫掠
+    //this.grass = false;  //食草
+    this.big = false;  //大体型
+    this.water = false;  //水生
+    this.hide = false;  //伪装
+    this.eye = false;  //锐利眼神
+    this.poisonous = false;  //有毒
+    this.home = false;  //穴居
+    this.run = false;  //擅跑
+    this.fat = false;  //脂肪
 };
 

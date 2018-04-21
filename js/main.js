@@ -19,6 +19,7 @@ var main = function(){
     };
 
     CardDeck();
+    AnimalList();
     game();
     for (var i = 0; i < CardDeck.nameList.length; i++)
     {
@@ -26,11 +27,15 @@ var main = function(){
         CardDeck.image[i].onload = function(){
             Loader.itemLoaded();
         };
-    }
-    for (var i = 0; i < CardDeck.nameList.length; i++)
-    {
         CardDeck.image2[i] = Loader.loadImage('image/' + CardDeck.nameList[i] + '2.png');
         CardDeck.image2[i].onload = function(){
+            Loader.itemLoaded();
+        };
+    }
+    for (var i = 0; i < AnimalList.nameList.length; i++)
+    {
+        AnimalList.image[i] = Loader.loadImage('image/' + AnimalList.nameList[i] + '.png');
+        AnimalList.image[i].onload = function(){
             Loader.itemLoaded();
         };
     }

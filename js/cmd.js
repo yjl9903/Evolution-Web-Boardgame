@@ -4,6 +4,7 @@ var handCardCmd = function(mode){
     var f = [307, 391, 476, 561, 646, 731, 815, 900, 985];
     var td = $('.handcard td');
     var rect = main.canvas2.getBoundingClientRect(); 
+    td.off();
     /*td.mouseenter(function(){
         var tot = $(this);
         var i = tot.index();
@@ -64,6 +65,7 @@ var handCardCmd = function(mode){
                     {
                         flag = true;
                         main.context2.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+                        tot.html('');
                         td.off('mouseleave');
                         td.off('mouseenter');
                     }
@@ -77,7 +79,7 @@ var handCardCmd = function(mode){
                     main.context2.drawImage(img, mx, my, 77, 120);
                 }
             };    
-            var mUp = function(){
+            var mUp = function(e){
                 if (!flag)
                 {
                     if (game.p[game.now].handState[i] === 1)
