@@ -1,19 +1,24 @@
 *{margin: 0; padding: 0;}
-.body{background-color: aqua}
+.body{background-color: aqua;}
+.top{background-color: aquamarine;}
+
 h1{text-align: center;}
 
-.game-div{margin: 0 auto; width: 1200px; height: 650px; border: 5px solid green; position:relative;}
+.game-div{margin: 0 auto; width: 1200px; height: 600px; border: 5px solid green; position:relative;}
 .game-canvas{
     border: 1px solid black; background-image: url(background.png); background-repeat: no-repeat;
-    position: absolute; z-index: -1;
+    position: absolute; z-index: -10;
 }
 .game-canvas2{
-    
+    position: absolute; z-index: -2;
 }
 
-.handcard{margin: -20px auto 0; height: 70px; width: 700px; position: absolute; left: 10%; bottom: 0px;}
+.handcard-div{width: 1200px; height: 70px; margin: 0 auto; border: 3px black solid;} 
+.handcard{margin: -20px 100px 0 0; height: 70px; width: 710px; position: absolute; left: 20%; bottom: 0px; border: 2px black solid;}
 .handcard td{
     height:120px; width: 77px; border: 3px solid black; 
     background-color: gold; 
     text-align: center;
 }
+
+.next-turn{width: 100px; height: 40px; float: right; margin-right: 100px; margin-top: 15px;}

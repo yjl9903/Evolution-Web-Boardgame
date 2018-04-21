@@ -11,23 +11,31 @@
     <script src="js/cmd.js"></script>
     <script src="js/card.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/anime.js"></script>
     <style>
         body{background-color: aqua;}
     </style>
 </head>
 <body onload="main()">
-    <div class = "container">
-        <h1>标题</h1>
-        <div class="game-div" style="margin: 0 auto;">
-            <canvas class="game-canvas" width="1200px" height="600px"></canvas>
-            <canvas class="game-canvas2" width="1200px" height="600px"></canvas>
-            <table class="handcard">
-                <tbody>
-                <tr>
-                    <td>1</td><td>2</td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                </tbody>
-            </table>
+    <div class = "container" >
+        <div class="top">
+            <h1>标题</h1>
+        </div>
+        <div>
+            <div class="game-div" style="margin: 0 auto;">
+                <canvas class="game-canvas" width="1200px" height="600px"></canvas>
+                <canvas class="game-canvas2" width="1200px" height="600px"></canvas>
+            </div>
+            <div class="handcard-div">
+                <table class="handcard">
+                    <tbody>
+                    <tr>
+                        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input type="button" value="Next Turn" class="next-turn"/>
+            </div>
         </div>
     </div>
 </body>

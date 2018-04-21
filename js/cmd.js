@@ -1,28 +1,110 @@
-var handCard = function(canvas){
-    var context = canvas.getContext('2d');
-    var f = [281, 380, 479, 579, 679, 779, 879];
+var handCardCmd = function(){
+    //var context = canvas.getContext('2d');
+    var f = [307, 391, 476, 561, 646, 731, 815, 900, 985];
     var td = $('.handcard td');
-    var rect = canvas.getBoundingClientRect(); 
+    var rect = main.canvas.getBoundingClientRect(); 
 
-    td.mouseenter(function(){
+    /*td.mouseenter(function(){
         var tot = $(this);
         var i = tot.index();
-        tot.css('width','77px');
-        tot.css('height','120px');
-        context.drawImage(cardImage[0], f[i] - rect.left, 585 - 120 - rect.top - 120, 154, 240);
+        //tot.css('width','77px');
+        //tot.css('height','120px');
+        main.context.drawImage(CardDeck.image2[game.p[game.now].hand[i]], f[i] - rect.left - 36, 585 - 120 - rect.top - 120);
+        //main.context.drawImage(CardDeck.image2[1], 600, 0);
     });
     td.mouseleave(function(){
         var tot = $(this);
         var i = tot.index();
-        tot.css('width','77px');
-        tot.css('height','120px');
-        context.clearRect(f[i] - rect.left, 585 - 120 - rect.top - 120, 154, 240);
-        tot.html('<img src="image/paibei.jpg" />')
-    });
-    td.click(function(){
-        
-    });
+        //tot.css('width','77px');
+        //tot.css('height','120px');
+        main.context.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+        //tot.html('<img src="image/paibei.jpg" width="77px" height="120px"/>')
+    });*/
+    var mEnter = function(){
+        var tot = $(this);
+        var i = tot.index();
+        var img;
+        if (game.p[game.now].handState[i] === 0)
+            img = CardDeck.image2[0];
+        else if (game.p[game.now].handState[i] === 1)
+            img = CardDeck.image2[game.p[game.now].hand[i]];
+        else
+            return;
+        //读取该位置的卡片图片
+        main.context.drawImage(img, f[i] - rect.left - 36, 585 - 120 - rect.top - 120);
+        //main.context.drawImage(CardDeck.image2[1], 600, 0);
+    };
+    var mLeave = function(){
+        var tot = $(this);
+        var i = tot.index();
+        main.context.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+    };
+    td.mouseenter(mEnter);
+    td.mouseleave(mLeave);
     
+    td.mousedown(function(e){
+        var sx = e.clientX - rect.left -36, sy = e.clientY - rect.top - 60, flag = false;
+        var mx = sx, my = sy;
+        var tot = $(this);
+        var i = tot.index();
+        var img;
+        if (game.p[game.now].handState[i] === 0)
+            img = CardDeck.image2[0];
+        else
+            img = CardDeck.image2[game.p[game.now].hand[i]];
+
+        var mMove = function(e){
+            if (!flag)
+            {
+                var x = e.clientX - rect.left - 36;
+                var y = e.clientY - rect.top - 60;
+                if (Math.abs(x - sx) >= 4 || Math.abs(y - sy) >= 4)
+                {
+                    flag = true;
+                    main.context.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+                    td.off('mouseleave');
+                    td.off('mouseenter');
+                }
+            }
+            else
+            {
+                main.context.clearRect(mx - 1, my - 1, 79, 122);
+                mx = e.clientX - rect.left - 36;
+                my = e.clientY - rect.top - 60;
+                console.log(mx + ' ' + my);
+                main.context.drawImage(img, mx, my, 77, 120);
+            }
+        };    
+        var mUp = function(){
+            if (!flag)
+            {
+                if (game.p[game.now].handState[i] === 1)
+                {
+                    game.p[game.now].handState[i] = 0;
+                    tot.html('<img src="image/paibei2.png" width="77px" height="120px" ondragstart="return false;"/>');
+                }
+                else if (game.p[game.now].handState[i] === 0)
+                {
+                    game.p[game.now].handState[i] = 1;
+                    tot.html('<img src="image/'+ CardDeck.nameList[game.p[game.now].hand[i]] +'2.png" width="77px" height="120px" ondragstart="return false;"/>');
+                }
+            }
+            else
+            {
+                main.context.clearRect(mx - 1, my - 1, 79, 122);
+                td.mouseenter(mEnter);
+                td.mouseleave(mLeave);
+            }
+            main.gameDiv.off('mousemove');
+            main.handDiv.off('mousemove');
+            main.gameDiv.off('mouseup');
+            main.handDiv.off('mouseup');
+        };
+        main.gameDiv.mousemove(mMove);
+        main.handDiv.mousemove(mMove);
+        main.gameDiv.mouseup(mUp);
+        main.handDiv.mouseup(mUp);
+    });
 };
 
 var drag = {
