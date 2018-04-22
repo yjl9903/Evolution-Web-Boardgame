@@ -48,13 +48,15 @@ var handCardCmd = function(mode){
         td.mousedown(function(e){
             var sx = e.clientX - rect.left -36, sy = e.clientY - rect.top - 60, flag = false;
             var mx = sx, my = sy;
-            var tot = $(this);
+            var tot = $(this), html;
             var i = tot.index();
             var img;
             if (game.p[game.now].handState[i] === 0)
                 img = CardDeck.image2[0];
-            else
+            else if (game.p[game.now].handState[i] === 1)
                 img = CardDeck.image2[game.p[game.now].hand[i]];
+            else
+                return;
 
             var mMove = function(e){
                 if (!flag)
@@ -65,6 +67,7 @@ var handCardCmd = function(mode){
                     {
                         flag = true;
                         main.context2.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+                        html = tot.html();
                         tot.html('');
                         td.off('mouseleave');
                         td.off('mouseenter');
@@ -96,18 +99,41 @@ var handCardCmd = function(mode){
                 else
                 {
                     main.context2.clearRect(mx - 1, my - 1, 79, 122);
+                    if (Math.abs(e.clientY - rect.top) <= 600 && Math.abs(e.clientX - rect.left))
+                    {
+                        console.log('OK');
+                        if (game.p[game.now].handState[i] === 0)
+                        {
+                            game.p[game.now].initAnimal(e.clientX - rect.left - 45, e.clientY - rect.top - 45);
+                            //使用了默认大小
+                        }
+                        else if (game.p[game.now].handState[i] === 1)
+                        {
+
+                        }
+                        game.p[game.now].useCard(i);
+                        game.switch();
+                    }
+                    else
+                    {
+                        tot.html(html);
+                        //console.log('JB');
+                    }
                     td.mouseenter(mEnter);
                     td.mouseleave(mLeave);
                 }
                 main.gameDiv.off('mousemove');
                 main.handDiv.off('mousemove');
-                main.gameDiv.off('mouseup');
-                main.handDiv.off('mouseup');
+                //main.gameDiv.off('mouseup');
+                //main.handDiv.off('mouseup');
+                $('body').off('mouseup');
+                //td.off('mousedown');
             };
             main.gameDiv.mousemove(mMove);
             main.handDiv.mousemove(mMove);
-            main.gameDiv.mouseup(mUp);
-            main.handDiv.mouseup(mUp);
+            //main.gameDiv.mouseup(mUp);
+            //main.handDiv.mouseup(mUp);
+            $('body').mouseup(mUp);
         });
     }
 };

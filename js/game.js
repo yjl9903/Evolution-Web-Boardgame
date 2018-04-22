@@ -1,6 +1,7 @@
 var game = function(){
-    var curText;
+    var curText, topText;
     var playerNum = 2;
+    var cnt = 0;
     game.now = 0;
     game.first = 0;
     game.deck;
@@ -9,18 +10,37 @@ var game = function(){
     game.p;
     
     for (var i = 0; i < playerNum; i++)
-        game.check[i] = 0;
+        game.check[i] = false;
 
     game.step = new Array(function(){
+        //  button
+        $('.next-turn').click(function(){
+            game.check[game.now] = true;
+            game.rest--;
+            if (!game.rest)
+            {
+                cnt++;
+                textEnter(curText, 500, 530, 2000, 30, 4);
+                var button = $('.next-turn');
+                button.attr('disabled', true);  //设置按钮无法点击
+                button.off();
+                game.step[cnt]();
+            }
+            else
+            {
+                game.switch();
+            }
+        });
+        //  button
         game.p[game.now].showHand();
         curText = '玩家 ' + game.now + ' 正在进行回合...';
-        textEnter(curText, 500, 530, 2000, 30, 3);
+        textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
         handCardCmd(1);
-        
-        
     }, 
     function(){
-
+        topText = '食物阶段...';
+        textEnter(topText, 500, 100, 2000, 30, 3, main.textContext);
+        handCardCmd(0);
     }, 
     function(){
 
@@ -32,12 +52,13 @@ var game = function(){
             p++;
         game.now = p % playerNum;
         game.p[game.now].showHand();
-        textEnter(curText, 500, 530, 2000, 30, 4);
+        textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
         curText = '玩家 ' + game.now + ' 正在进行回合...';
-        textEnter(curText, 500, 530, 2000, 30, 3);
+        textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
     };
 
     game.set = function(){
+        var color = new Array([255, 30, 30], [131, 111, 255], [0, 238, 0], [238, 238, 238]);
         game.deck = CardDeck.shuffle();
         game.p = new Array(playerNum);
         for (var i = 0; i < playerNum; i++)
@@ -45,6 +66,7 @@ var game = function(){
             game.p[i] = new Player();
             game.p[i].hand.size = 0;
             game.p[i].ownAnimal.size = 0;
+            game.p[i].color = color[i];
         }
         for (var i = 0; i < playerNum * 6; i++)
         {
@@ -53,9 +75,7 @@ var game = function(){
             game.p[i % playerNum].handState[Math.floor(i / playerNum)] = 1;
             //console.log(Math.floor(i / playerNum));
         }
-        $('.next-turn').click(function(){
-            game.switch();
-        });
+        
         game.step[0]();
     };
 };
@@ -65,6 +85,7 @@ function Player(){
     this.handState = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
     this.score = 0;
     this.ownAnimal = new Array(0);
+    this.color = new Array(3);
 
     this.showHand = function(){
         var td = $('.handcard td');
@@ -92,6 +113,8 @@ function Player(){
             this.hand[i - 1] = this.hand[i];
             this.handState[i - 1] = this.handState[i];
         }
+        this.hand.size--;
+        this.handState[this.hand.size] = -1;
     };
 
     this.initAnimal = function(x, y){
@@ -100,8 +123,9 @@ function Player(){
         newAnimal.ability.size = 0;
         this.score += 2;
         this.ownAnimal.size++;
-        this.ownAnimal[size - 1] = newAnimal;
-        main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
+        this.ownAnimal[this.ownAnimal.size - 1] = newAnimal;
+        //main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
+        DrawAnimal(x, y);
         console.log('玩家 ' + game.now + ' 繁殖出了一个新的生命...')
     };
 };

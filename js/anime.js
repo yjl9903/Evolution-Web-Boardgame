@@ -43,20 +43,22 @@
     }
 };*/
 
-function textEnter(content, locX, locY, width, font, mode){
-    main.textContext.font = font + "px Microsoft YaHei";
-    main.textContext.textAlign = "center";
+function textEnter(content, locX, locY, width, font, mode, ctx, fontColor1, fontColor2, fontColor3){
+    ctx.font = font + "px Microsoft YaHei";
+    ctx.textAlign = "center";
     var sum = 0, flag = true, dy = 50;
     var rgba = "rgba(60, 60, 60, "
+    if (fontColor1)
+        rgba = "rgba(" + fontColor1 + ',' + fontColor2 + ',' + fontColor3 + ',';
 
     //0：淡入，1：淡出，3：向上淡入，4：向上淡出
     if (mode === 1)
     {
         sum = 1;
         (function animate1(){
-            main.textContext.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
-            main.textContext.fillStyle = rgba + sum + ")";
-            main.textContext.fillText(content, locX, locY);
+            ctx.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
+            ctx.fillStyle = rgba + sum + ")";
+            ctx.fillText(content, locX, locY);
             if (sum > 0)
             {
                 sum -= 0.02;
@@ -67,9 +69,9 @@ function textEnter(content, locX, locY, width, font, mode){
     else if (mode === 0)
     {
         (function animate0(){
-            main.textContext.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
-            main.textContext.fillStyle = rgba + sum + ")";
-            main.textContext.fillText(content, locX, locY);
+            ctx.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
+            ctx.fillStyle = rgba + sum + ")";
+            ctx.fillText(content, locX, locY);
             if (sum < 1)
             {
                 sum += 0.02;
@@ -82,10 +84,10 @@ function textEnter(content, locX, locY, width, font, mode){
         sum = 1;
         dy = 0;
         (function animate4(){
-            main.textContext.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
-            main.textContext.fillStyle = rgba + sum + ")";
+            ctx.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
+            ctx.fillStyle = rgba + sum + ")";
             dy -= 1;
-            main.textContext.fillText(content, locX, locY + dy);
+            ctx.fillText(content, locX, locY + dy);
             if (sum > 0)
             {
                 sum -= 0.02;
@@ -97,10 +99,10 @@ function textEnter(content, locX, locY, width, font, mode){
     {
         //alert(1);
         (function animate3(){
-            main.textContext.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
-            main.textContext.fillStyle = rgba + sum + ")";
+            ctx.clearRect(locX - width, locY - font + dy, width * 2, 2 * font - 10);
+            ctx.fillStyle = rgba + sum + ")";
             dy -= 1;
-            main.textContext.fillText(content, locX, locY + dy);
+            ctx.fillText(content, locX, locY + dy);
             if (sum < 1)
             {
                 sum += 0.02;
