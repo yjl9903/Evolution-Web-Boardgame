@@ -4,7 +4,8 @@ var CardDeck = function(){
     CardDeck.image = new Array(20);  //原图
     CardDeck.image2 = new Array(20);  //缩略图，154 * 240
     CardDeck.srcDeck = new Array(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3);
-
+    //CardDeck.abilityList = new Array('');
+    //0: posionous
     //for (var i = 0; i < CardDeck.srcDeck.length; i++)
     //    console.log(CardDeck.srcDeck[i]);
 
@@ -38,6 +39,7 @@ var AnimalList = function(){
 function Animal(tot, x, y){
     this.locX = x;
     this.locY = y;;
+    //this.path;
     this.width = 90;
     this.height = 90;
     this.type = 0;
@@ -46,7 +48,18 @@ function Animal(tot, x, y){
     this.food = 1;
     this.totFood = 0;
     
-    this.meat = false;  //食肉
+    this.state = {
+        meat: false,
+        rob: false,
+        big: false,
+        water: false,
+        hide: false,
+        eye: false,
+        posionous: false,
+        home: false,
+        run: false
+    };
+    /*this.meat = false;  //食肉
     this.rob = false;  //劫掠
     //this.grass = false;  //食草
     this.big = false;  //大体型
@@ -56,6 +69,6 @@ function Animal(tot, x, y){
     this.poisonous = false;  //有毒
     this.home = false;  //穴居
     this.run = false;  //擅跑
-    this.fat = false;  //脂肪
+    this.fat = false;  //脂肪*/
 };
 

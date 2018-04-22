@@ -9,6 +9,8 @@ var main = function(){
     main.context2 = main.canvas2.getContext('2d');
     main.textCanvas = $('.text-canvas')[0];
     main.textContext = main.textCanvas.getContext('2d');
+    main.infoCanvas = $('.info-canvas')[0];
+    main.infoContext = main.infoCanvas.getContext('2d');
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     

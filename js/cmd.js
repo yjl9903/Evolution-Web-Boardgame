@@ -85,34 +85,53 @@ var handCardCmd = function(mode){
             var mUp = function(e){
                 if (!flag)
                 {
+                    //console.log(game.p[game.now].handState[i]);
                     if (game.p[game.now].handState[i] === 1)
                     {
+                        //console.log('Error 1');
                         game.p[game.now].handState[i] = 0;
                         tot.html('<img src="image/paibei2.png" width="77px" height="120px" ondragstart="return false;"/>');
                     }
                     else if (game.p[game.now].handState[i] === 0)
                     {
+                        console.log('Error 1');
                         game.p[game.now].handState[i] = 1;
                         tot.html('<img src="image/'+ CardDeck.nameList[game.p[game.now].hand[i]] +'2.png" width="77px" height="120px" ondragstart="return false;"/>');
                     }
                 }
                 else
                 {
+                    //console.log('Error 2');
                     main.context2.clearRect(mx - 1, my - 1, 79, 122);
                     if (Math.abs(e.clientY - rect.top) <= 600 && Math.abs(e.clientX - rect.left))
                     {
-                        console.log('OK');
+                        //console.log('OK');
                         if (game.p[game.now].handState[i] === 0)
                         {
+                            //生成动物
                             game.p[game.now].initAnimal(e.clientX - rect.left - 45, e.clientY - rect.top - 45);
                             //使用了默认大小
+                            game.p[game.now].useCard(i);
+                            game.switch();
                         }
                         else if (game.p[game.now].handState[i] === 1)
                         {
-
+                            //进化能力
+                            //console.log(1);
+                            var x = game.p[game.now].inAnimal(e.clientX - rect.left, e.clientY - rect.top);
+                            if (x > -1)
+                            {
+                                game.p[game.now].evovleAbility(x, CardDeck.nameList[game.p[game.now].hand[i]]);
+                                game.p[game.now].useCard(i);
+                                game.switch();
+                            }
+                            else
+                            {
+                                tot.html(html);
+                            }
                         }
-                        game.p[game.now].useCard(i);
-                        game.switch();
+                        //game.p[game.now].useCard(i);
+                        //game.switch();
                     }
                     else
                     {

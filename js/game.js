@@ -19,7 +19,6 @@ var game = function(){
             game.rest--;
             if (!game.rest)
             {
-                alert(game.rest);
                 cnt++;
                 textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
                 var button = $('.next-turn');
@@ -124,10 +123,49 @@ function Player(){
         newAnimal.ability.size = 0;
         this.score += 2;
         this.ownAnimal.size++;
-        this.ownAnimal[this.ownAnimal.size - 1] = newAnimal;
         //main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
         DrawAnimal(x, y);
+        var path = new Path2D();
+        //path.addPath();
+        //path.moveTo(x, y);
+        //path.lineTo(x + 90, y);
+        //path.lineTo(x + 90, y + 90 + 20);
+        //path.lineTo(x, y + 90 + 20);
+        //path.closePath();
+        //newAnimal.path = path;
+        //main.context.fillStyle = "rgba(0,0,0,0.3)";
+        //main.context.fill(path);
+        //main.infoContext.fill();
+        //chrome:\\flags，调整canvas experiment
+        //main.context.fillStyle = "rgba(0,0,0,0.3)";
+        //main.context.fillRect(newAnimal.locX, newAnimal.locY, newAnimal.width, newAnimal.height + 20);
+        this.ownAnimal[this.ownAnimal.size - 1] = newAnimal;
         console.log('玩家 ' + game.now + ' 繁殖出了一个新的生命...')
+    };
+
+    this.inAnimal = function(x, y){
+        for (var i = 0; i < this.ownAnimal.size; i++)
+        {
+            //console.log(2);
+            //if (main.infoContext.isPointInPath(this.ownAnimal[i].path, x, y))
+            //{
+            //    console.log('OK');
+            //}
+            if (x - this.ownAnimal[i].locX <= this.ownAnimal[i].width && y - this.ownAnimal[i].locY <= this.ownAnimal[i].width + 20 && x >= this.ownAnimal[i].locX && y >= this.ownAnimal[i].locY)
+            {
+                console.log('玩家 ' + game.now + ' 成功为他的动物 ' + i + ' 进化了一个能力...');
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    this.evovleAbility = function(n, ability){
+        this.ownAnimal[n].ability.size++;
+        this.ownAnimal[n].ability.push(ability);
+        this.ownAnimal[n].state[ ability ] = true;
+        //console.log(this.ownAnimal[n].ability[0]);
+        //console.log(ability + ' ' + this.ownAnimal[n].state[ ability ]);
     };
 };
 
