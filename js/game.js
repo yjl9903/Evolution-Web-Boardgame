@@ -19,8 +19,9 @@ var game = function(){
             game.rest--;
             if (!game.rest)
             {
+                alert(game.rest);
                 cnt++;
-                textEnter(curText, 500, 530, 2000, 30, 4);
+                textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
                 var button = $('.next-turn');
                 button.attr('disabled', true);  //设置按钮无法点击
                 button.off();
