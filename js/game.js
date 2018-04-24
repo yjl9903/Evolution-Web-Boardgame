@@ -1,6 +1,6 @@
 var game = function(){
     var curText, topText;
-    var playerNum = 2;
+    var playerNum = 2, foodNum = 0;
     var cnt = 0;
     game.now = 0;
     game.first = 0;
@@ -42,6 +42,8 @@ var game = function(){
         topText = '食物阶段...';
         textEnter(topText, 500, 100, 2000, 30, 3, main.textContext);
         handCardCmd(0);
+        foodNum = initFood(playerNum);
+        console.log(foodNum);
     }, 
     function(){
 

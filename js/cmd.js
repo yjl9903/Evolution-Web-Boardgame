@@ -178,12 +178,13 @@ var mapCmd = function(mode, xn, xm){
 
     mapCmd.mode1 = function(xn, xm){
         console.log(checked[xn][xm]);
-        if (!checked[xn][xm])
-        {
+        //if (!checked[xn][xm])
+        //{
             main.infoContext.clearRect(location[xn][xm].x, location[xn][xm].y, location[xn][xm].width, location[xn][xm].height);
             var tmp = drawInfo(main.cx, main.cy, xn, xm);
             location[xn][xm] = {x: tmp[0], y: tmp[1], width: tmp[2], height: tmp[3]};
-        }
+            checked[xn][xm] = 0;
+        //}
         return;
     };
 

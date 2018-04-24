@@ -158,3 +158,30 @@ function drawInfo(x, y, n, m){
     }
     return [x, y - arrowY1 - len * unit - arcLen, arrowX + width + arcLen * 2, arrowY1 - arrowY2 + 2 * arcLen + len * unit];
 };
+
+function initFood(n){
+    var cnt, rand, t = 0, flag = false;;
+    if (n === 2)
+        rand = function(){
+            return 2 + random(1, 7);
+        };
+    else if (n === 3)
+        rand = function(){
+            return random(1, 7) + random(1, 7);
+        };
+    else
+        rand = function(){
+            return 2 + random(1, 7) + random(1, 7);
+        };
+    
+    var content1 = '这个月，大地上新生了 ', content2 = ' 食物...';
+    (function animate1(){
+        cnt = rand();
+        main.textContext.clearRect(280, 120, 430, 90);
+        main.textContext.fillText(content1 + cnt + content2, 500, 150);
+        t++;
+        if (t < 125)
+            window.requestAnimationFrame(animate1, main.textCanvas);
+    }());
+    return cnt;
+};
