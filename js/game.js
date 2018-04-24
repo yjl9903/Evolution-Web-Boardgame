@@ -36,6 +36,7 @@ var game = function(){
         curText = '玩家 ' + game.now + ' 正在进行回合...';
         textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
         handCardCmd(1);
+        mapCmd(0);
     }, 
     function(){
         topText = '食物阶段...';
@@ -77,6 +78,30 @@ var game = function(){
         }
         
         game.step[0]();
+    };
+
+    game.isOver = function(x, y){
+        for (var i = 0; i < playerNum; i++)
+        {
+            for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+            {
+                if (Math.abs(x - game.p[i].ownAnimal[j].locX) < game.p[i].ownAnimal[j].width && Math.abs(y - game.p[i].ownAnimal[j].locY) < game.p[i].ownAnimal[j].height)
+                {
+                    return false;
+                }
+            }
+        }
+        return true; //无重叠
+    };
+    game.isClickAnimal = function(x, y){
+        var tmp = -1;
+        for (var i = 0; i < playerNum; i++)
+        {
+            tmp = game.p[i].inAnimal(x, y);
+            if (tmp != -1)
+                return [i, tmp];
+        }
+        return [-1, -1];
     };
 };
 
@@ -153,7 +178,6 @@ function Player(){
             //}
             if (x - this.ownAnimal[i].locX <= this.ownAnimal[i].width && y - this.ownAnimal[i].locY <= this.ownAnimal[i].width + 20 && x >= this.ownAnimal[i].locX && y >= this.ownAnimal[i].locY)
             {
-                console.log('玩家 ' + game.now + ' 成功为他的动物 ' + i + ' 进化了一个能力...');
                 return i;
             }
         }
@@ -161,11 +185,17 @@ function Player(){
     };
 
     this.evovleAbility = function(n, ability){
+        //console.log(this.ownAnimal[n].state[ ability ]);
+        if (this.ownAnimal[n].state[ ability ])
+            return false;
         this.ownAnimal[n].ability.size++;
         this.ownAnimal[n].ability.push(ability);
         this.ownAnimal[n].state[ ability ] = true;
+        mapCmd.mode1(game.now, n);
+        console.log('玩家 ' + game.now + ' 成功为他的动物 ' + n + ' 进化了一个能力...');
         //console.log(this.ownAnimal[n].ability[0]);
         //console.log(ability + ' ' + this.ownAnimal[n].state[ ability ]);
+        return true;
     };
 };
 

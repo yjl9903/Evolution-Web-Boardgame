@@ -111,3 +111,50 @@ function textEnter(content, locX, locY, width, font, mode, ctx, fontColor1, font
         }());
     }
 };
+
+function drawInfo(x, y, n, m){
+    var unit = 20, arrowX = 20, arrowY1 = 20 * Math.sqrt(3), arrowY2 = 20 / Math.sqrt(3), width = 50, arcLen = 20;
+    var len = game.p[n].ownAnimal[m].ability.size - 1;
+    var name = {
+        'water': '水生',
+        'hide': '伪装',
+        'eye': '锐目',
+        'run': '擅跑'
+    };
+
+    //console.log(len);
+    main.infoContext.fillStyle = "rgba(255,255,255,0.7)";
+    main.infoContext.beginPath();
+    main.infoContext.moveTo(x, y);
+    main.infoContext.lineTo(x + arrowX, y - arrowY1);
+    main.infoContext.lineTo(x + arrowX, y - arrowY1 - len * unit);
+    main.infoContext.quadraticCurveTo(x + arrowX, y - arrowY1 - len * unit - arcLen, x + arrowX + arcLen, y - arrowY1 - len * unit - arcLen);
+    main.infoContext.lineTo(x + arrowX + width, y - arrowY1 - len * unit - arcLen);
+    main.infoContext.quadraticCurveTo(x + arrowX + width + arcLen, y - arrowY1 - len * unit - arcLen, x + arrowX + width + arcLen, y - arrowY1 - len * unit);
+    main.infoContext.lineTo(x + arrowX + width + arcLen, y - arrowY2);
+    main.infoContext.quadraticCurveTo(x + arrowX + width + arcLen, y - arrowY2 + arcLen, x + arrowX + width, y - arrowY2 + arcLen);
+    main.infoContext.lineTo(x + arrowX + arcLen, y - arrowY2 + arcLen);
+    main.infoContext.quadraticCurveTo(x + arrowX, y - arrowY2 + arcLen, x + arrowX, y - arrowY2);
+    main.infoContext.closePath();
+    main.infoContext.fill();
+    
+    main.infoContext.font = "20px Microsoft YaHei";
+    //main.infoContext.textAlign = "center";
+    main.infoContext.fillStyle = "rgba(0, 0, 0, 0.7)";
+    
+    if (!len)
+    {
+        //console.log(game.p[n].ownAnimal[m].ability[0]);
+        var content = name[game.p[n].ownAnimal[m].ability[0]];
+        main.infoContext.fillText(content, x + arrowX / 2 + arcLen + 5, y - arrowY1 / 2);
+    }
+    else
+    {
+        for (var i = 0; i < len + 1; i++)
+        {
+            var content = name[game.p[n].ownAnimal[m].ability[i]];
+            main.infoContext.fillText(content, x + arrowX / 2 + arcLen + 5, y -  2 * arrowY1 / 3 - i * (unit + 5) + arcLen / 2);
+        }
+    }
+    return [x, y - arrowY1 - len * unit - arcLen, arrowX + width + arcLen * 2, arrowY1 - arrowY2 + 2 * arcLen + len * unit];
+};

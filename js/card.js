@@ -34,6 +34,12 @@ var card = function(){
 var AnimalList = function(){
     AnimalList.nameList = new Array('rabbit', 'rabbit');
     AnimalList.image = new Array(10);
+    AnimalList.name = {
+        'water': '水生',
+        'hide': '伪装',
+        'eye': '锐利眼神',
+        'run': '擅跑'
+    };
 };
 
 function Animal(tot, x, y){
@@ -59,6 +65,7 @@ function Animal(tot, x, y){
         home: false,
         run: false
     };
+    
     /*this.meat = false;  //食肉
     this.rob = false;  //劫掠
     //this.grass = false;  //食草

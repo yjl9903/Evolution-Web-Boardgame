@@ -1,7 +1,10 @@
 //var cardImage = new Array(10);
 
 var main = function(){
+    main.cx = 0;
+    main.cy = 0;
     main.gameDiv = $('.game-div');
+    main.gameDiv2 = $('.game-div2');
     main.handDiv = $('.handcard-div');
     main.canvas = $('.game-canvas')[0];
     main.context = main.canvas.getContext('2d');

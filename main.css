@@ -5,6 +5,7 @@
 h1{text-align: center;}
 
 .game-div{margin: 0 auto; width: 1200px; height: 600px; border: 5px solid green; position:relative;}
+.game-div2{width: 1200px; height: 600px; border: 2px yellowgreen solid;}
 .game-canvas{
     border: 1px solid black; background-image: url(background.png); background-repeat: no-repeat;
     position: absolute; z-index: -10;
