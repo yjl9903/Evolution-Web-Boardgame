@@ -1,21 +1,27 @@
 var game = function(){
-    var curText, topText;
+    var curText = ' ', topText = ' ';
     var playerNum = 2, foodNum = 0;
     var cnt = 0;
     game.now = 0;
     game.first = 0;
     game.deck;
-    game.check = new Array(4);
     game.rest = playerNum;
     game.p;
+    game.pFlag = new Array(playerNum);
+    game.check = new Array(4);
     
     for (var i = 0; i < playerNum; i++)
         game.check[i] = false;
 
-    game.step = new Array(function(){
+    game.step = new Array(function(){//阶段0
         main.clear();
+        for (var i = 0; i < playerNum; i++)
+            game.pFlag[i] = 0, game.check[i] = false;
+        game.now = game.first;
+        game.rest = playerNum;
         //  button
         var button = $('.next-turn');
+        button.attr('disabled', false);
         button.click(function(){
             game.check[game.now] = true;
             game.rest--;
@@ -23,7 +29,6 @@ var game = function(){
             {
                 cnt++;
                 textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
-                
                 button.attr('disabled', true);  //设置按钮无法点击
                 button.off();
                 game.step[cnt]();
@@ -34,24 +39,134 @@ var game = function(){
             }
         });
         //  button
+        textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
+        topText = '进化阶段...';
+        textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
         game.p[game.now].showHand();
         curText = '玩家 ' + game.now + ' 正在进行回合...';
         textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
         handCardCmd(1);
         mapCmd(0);
     }, 
-    function(){
+    function(){//阶段1
         main.clear();
-        topText = '食物阶段...';
+        game.hideCard();
+        for (var i = 0; i < playerNum; i++)
+            game.pFlag[i] = 0, game.check[i] = false; //尚未行动过
+        game.now = game.first;
+        game.rest = playerNum;
+        //-------初始化
+        var nextPlayer = $('.next-turn'), nextTurn = $('.next-player');
+        //nextPlayer.attr('disabled', false);
+        nextPlayer.click(function(){
+            game.pFlag[game.now] = 0;
+            game.switch();
+        });
+        nextPlayer.mouseenter(function(){
+            nextTurn.slideDown("slow");
+            setTimeout(function(){
+                nextTurn.slideUp("slow");
+            }, 3000);
+        });
+        nextTurn.mouseenter(function(){
+            //clearTimeout();
+            //nextTurn.show();
+            $(this).css('cursor', 'pointer');
+            
+        });
+        nextTurn.click(function(){
+            game.check[game.now] = true;
+            game.rest--;
+            nextTurn.hide();
+            //clearTimeout();
+            if (!game.rest)
+            {
+                //for (var i = 0; i < playerNum; i++)
+                //    for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+                //        game.p[i].ownAnimal[j].totFood = 0;
+                cnt++;
+                textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
+                nextPlayer.attr('disabled', true);  //设置按钮无法点击
+                nextPlayer.off();
+                nextTurn.off();
+                game.step[cnt]();
+            }
+            else
+            {
+                game.switch();
+            }
+        });
+        textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
+        topText = '喂食阶段...';
         textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
         handCardCmd(0);
         initFoodAnimation(playerNum);//动画结束时，直接生成食物，食物生成后进入喂食阶段
-        //console.log(foodNum);
+        curText = '玩家 ' + game.now + ' 正在进行回合...';
         //food.init();
-        
     }, 
-    function(){
+    function(){//阶段2
+        game.rest = playerNum;
+        game.now = game.first;
+        main.clear();
 
+        textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
+        main.textContext.clearRect(380, 70, 430, 90);
+        topText = "消亡阶段...";
+        textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
+        game.hideCard();
+        for (var i = 0; i < playerNum; i++)
+        {
+            for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+            {
+                if (game.p[i].ownAnimal[j].totFood < game.p[i].ownAnimal[j].foodNeed)
+                {
+                    animalDie(i, j);
+                    game.p[i].ownAnimal.splice(j, 1);
+                    game.p[i].ownAnimal.size--;
+                    j--;
+                }
+                else
+                {
+                    game.p[i].ownAnimal[j].totFood = 0;
+                }
+            }
+        }
+        for (var i = 0; i < playerNum; i++)
+        {
+            game.p[i].drawCard(game.p[i].ownAnimal.size + 1);
+        }
+
+        for (var i = 0; i < 9; i++)
+        {
+            //console.log(game.p[0].handState[i]);
+            //console.log(game.p[1].handState[i])
+        }
+
+        curText = "点击下回合以确认手牌...";
+        textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
+        var button = $('.next-turn');
+        button.attr('disabled', false)
+        button.click(function(){
+            console.log(game.now);
+            if (game.rest === 0)
+            {
+                game.now = game.first;
+                game.rest = playerNum;
+                button.attr('disabled', true)
+                button.off();
+                cnt = 0;
+                game.step[cnt]();
+                return;
+            }
+            textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
+            curText = '玩家 ' + game.now + ' 正在确认手牌...';
+            textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
+            game.p[game.now].showHand();
+            handCardCmd(0);
+            game.rest--;
+            game.now = (game.now + 1) % playerNum
+            //console.log(game.rest);
+        });
     });
 
     game.switch = function(){
@@ -86,6 +201,12 @@ var game = function(){
         }
         
         game.step[0]();
+    };
+
+    game.hideCard = function(){
+        var td = $('.handcard td');
+        td.html('');
+        td.off();
     };
 
     game.isOver = function(x, y){
@@ -130,7 +251,7 @@ var game = function(){
 
 function Player(){
     this.hand = new Array(0);
-    this.handState = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+    this.handState = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
     this.score = 0;
     this.ownAnimal = new Array(0);
     this.color = new Array(3);
@@ -163,6 +284,15 @@ function Player(){
         }
         this.hand.size--;
         this.handState[this.hand.size] = -1;
+    };
+
+    this.drawCard = function(n){
+        for (var i = 0; i < n; i++)
+        {
+            this.hand.push(game.deck.pop());
+            this.handState[this.hand.size] = 1;
+            this.hand.size++;
+        }
     };
 
     this.initAnimal = function(x, y){
@@ -253,7 +383,13 @@ function food(){
             DrawFood(food.locX[i], food.locY[i], main.foodContext);
             //main.foodContext.putImageData(FoodList.imageData[0], 75, 75);
         }
+        //进入喂食阶段
+        //------------
         foodCmd(0);
+        textEnter('玩家 ' + game.now + ' 正在进行回合...', 500, 530, 2000, 30, 3, main.textContext);
+        game.p[game.now].showHand();
+        $('.next-turn').attr('disabled', false);
+        //-----------
     };
     food.isInFood = function(x, y){
         for (var i = 0; i < food.num; i++)
@@ -271,7 +407,7 @@ function food(){
         food.locY.splice(n, 1);
         food.width.splice(n, 1);
         food.height.splice(n, 1);
-        var content1 = '这个月，大地上剩余了 ', content2 = ' 份食物...';
+        var content1 = '这个月，大地上还剩余 ', content2 = ' 份食物...';
         main.textContext.clearRect(380, 70, 430, 90);
         main.textContext.fillText(content1 + food.num + content2, 600, 100);
     };

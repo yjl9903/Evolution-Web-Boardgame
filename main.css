@@ -4,9 +4,9 @@ body{background-color: aqua;}
 
 h1{text-align: center;}
 
-.game-div{margin: 0 auto; width: 1200px; height: 600px; border: 5px solid green; position:relative;}
-.game-div2{width: 1200px; height: 600px; border: 2px yellowgreen solid;}
-.food-div{width: 1200px; height: 600px; border: 2px greenyellow solid;}
+.game-div{margin: 0 auto; width: 1200px; height: 600px; /*border: 5px solid green;*/ position:relative;}
+.game-div2{width: 1200px; height: 600px; /*border: 2px yellowgreen solid;*/}
+.food-div{width: 1200px; height: 600px; /*border: 2px greenyellow solid;*/}
 .game-canvas{
     border: 1px solid black; background-image: url(background.png); background-repeat: no-repeat;
     position: absolute; z-index: -10;
@@ -30,7 +30,7 @@ h1{text-align: center;}
     position: absolute; z-index: 0;
 }
 
-.handcard-div{width: 1200px; height: 70px; margin: 0 auto; border: 3px black solid;} 
+.handcard-div{width: 1200px; height: 70px; margin: 0 auto; /*border: 3px black solid;*/} 
 .handcard{margin: -20px 100px 0 0; height: 70px; width: 750px; position: absolute; left: 20%; bottom: 0px; border: 2px black solid;}
 .handcard td{
     height:120px; width: 77px; border: 3px solid black; 
@@ -39,3 +39,7 @@ h1{text-align: center;}
 }
 
 .next-turn{width: 100px; height: 40px; float: right; margin-right: 100px; margin-top: 15px; cursor: pointer;}
+.next-player{
+    position: relative; display: none;
+    width: 100px; height: 40px; float: right;  margin-top: -25px; margin-right: -100px; margin-bottom: -15px; cursor: pointer;
+}

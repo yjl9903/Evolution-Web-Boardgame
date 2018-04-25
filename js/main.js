@@ -107,6 +107,8 @@ var main = function(){
         main.context2.clearRect(0, 0, 1200, 600);
         main.foodContext.clearRect(0, 0, 1200, 600);
         main.textContext.clearRect(0, 0, 1200, 600);
+        main.tempContext.clearRect(0, 0, 1200, 600);
+        main.markContext.clearRect(0, 0, 1200, 600);
     };
 };
 

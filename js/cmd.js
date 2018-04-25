@@ -25,7 +25,11 @@ var handCardCmd = function(mode){
         var tot = $(this);
         var i = tot.index();
         var img;
-        tot.css('cursor', 'pointer');
+        console.log(game.now);
+        if (game.p[game.now].handState[i] !== -1)
+            tot.css('cursor', 'pointer');
+        else
+            tot.css('cursor', '');
         if (game.p[game.now].handState[i] === 0)
             img = CardDeck.image2[0];
         else if (game.p[game.now].handState[i] === 1)
@@ -39,6 +43,7 @@ var handCardCmd = function(mode){
     var mLeave = function(){
         var tot = $(this);
         var i = tot.index();
+        tot.css('cursor', '');
         main.context2.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
     };
     td.mouseenter(mEnter);
@@ -178,7 +183,7 @@ var mapCmd = function(mode, xn, xm){
     }
 
     mapCmd.mode1 = function(xn, xm){
-        console.log(checked[xn][xm]);
+        console.log(222222);
         //if (!checked[xn][xm])
         //{
             main.infoContext.clearRect(location[xn][xm].x, location[xn][xm].y, location[xn][xm].width, location[xn][xm].height);
@@ -196,9 +201,10 @@ var mapCmd = function(mode, xn, xm){
         //var flag = game.p[game.now].inAnimal(mx, my);
         var flag = game.isClickAnimal(mx, my);
         //console.log(flag[0]);
-        if (food.isInFood(mx, my) !== -1)
-            return;
-        if (flag[0] > -1)
+        //if (food.isInFood(mx, my) !== -1)
+        //    return;
+        var mark = food.isInFood(mx, my);
+        if (flag[0] > -1 && mark === -1)
         {
             var len = game.p[flag[0]].ownAnimal[flag[1]].ability.size;
             //console.log(len);
@@ -210,7 +216,7 @@ var mapCmd = function(mode, xn, xm){
                 checked[flag[0]][flag[1]] = 0;
             } 
         }
-        else
+        else if (mark === -1)
         {
             main.infoContext.clearRect(0, 0, 1200, 600);
             for (var i = 0; i < 6; i++)
@@ -221,12 +227,14 @@ var mapCmd = function(mode, xn, xm){
                 }
         }
     };
+    main.gameDiv2.off();
     main.gameDiv2.click(mapCmd.mClick);
     //main.gameDiv2.click(function(e){});
 };
 
 var foodCmd = function(mode){
     var mx = 0, my = 0, rect = main.canvas.getBoundingClientRect();
+    main.foodDiv.off();
     main.foodDiv.mousedown(function(e){
         mx = e.clientX - rect.left;
         my = e.clientY - rect.top;
@@ -247,31 +255,31 @@ var foodCmd = function(mode){
                 DrawFood(mx, my, main.tempContext);
                 //main.foodContext.drawImage(FoodList.image[0], mx, my, food.width[n], food.height[n]);
             });
+            //拖拽动画
             main.foodDiv.mouseup(function(e){
                 main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
                 mx = e.clientX - rect.left;
                 my = e.clientY - rect.top;
                 var flag = game.isClickAnimal(mx, my);
                 var tn = flag[0], tm = flag[1]; //tn玩家，tm动物
-                if (tn != -1)
+                if (tn === game.now)
                 {
                     main.markContext.font = "20px arial";
-                    main.markContext.fillStyle = "rgba(" + game.p[tn].color[0] + ',' + game.p[tn].color[1] + ',' + game.p[tn].color[2] + ',0.7)';
+                    main.markContext.fillStyle = "rgba(" + game.p[tn].color[0] + ',' + game.p[tn].color[1] + ',' + game.p[tn].color[2] + ',0.9)';
                     //main.markContext.fillRect(0,0,100,100);
-                    if (game.p[tn].ownAnimal[tm].totFood < game.p[tn].ownAnimal[tm].foodNeed)
+                    if (game.p[tn].ownAnimal[tm].totFood < game.p[tn].ownAnimal[tm].foodNeed && game.pFlag[game.now] === 0)
                     {
-                        //此处为成功喂食
+                        //此处为成功喂食,动物尚未饱食，且玩家尚未行动
                         //main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
+                        //main.markContext.fillRect(0, 0, 40,40);
                         food.deleteFood(n);
-                        
-                        main.markContext.fillRect(0, 0, 40,40);
-                        var markX = game.p[tn].ownAnimal[tm].locX + game.p[tn].ownAnimal[tm].width;
-                        var markY = game.p[tn].ownAnimal[tm].locY;
-                        console.log(markX, markY);
-                        main.markContext.fillRect(markX, markY, 100,100);
+                        var markX = game.p[tn].ownAnimal[tm].locX;
+                        var markY = game.p[tn].ownAnimal[tm].locY + 30;
+                        //console.log(markX, markY);
                         game.p[tn].ownAnimal[tm].totFood++;
-                        //console.log(game.p[n].ownAnimal[m].totFood);
-                        main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, game.p[tn].ownAnimal[tm].locX, game.p[tn].ownAnimal.locY);
+                        main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                        main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, markX, markY);
+                        game.pFlag[game.now] = 1;
                     }
                     else
                     {
@@ -280,7 +288,7 @@ var foodCmd = function(mode){
                         DrawFood(sx, sy, main.foodContext);
                     }
                 }
-                else
+                else if (tn === -1)
                 {
                     mx = mx - food.width[n] / 2;
                     my = my - food.height[n] / 2;
@@ -304,6 +312,12 @@ var foodCmd = function(mode){
                         food.locY[n] = my;
                         DrawFood(mx, my, main.foodContext);
                     }
+                }
+                else
+                {
+                    food.locX[n] = sx;
+                    food.locY[n] = sy;
+                    DrawFood(sx, sy, main.foodContext);
                 }
                 //main.gameDiv2.click(mapCmd.mClick);
                 main.foodDiv.off('mousemove');

@@ -189,3 +189,7 @@ function initFoodAnimation(n){
     }());
     return cnt;
 };
+
+function animalDie(n, m){
+    main.context.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+};

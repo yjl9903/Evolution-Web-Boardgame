@@ -3,7 +3,7 @@ var CardDeck = function(){
     //CardDeck.nameList2 = new Array('paibei2', 'shuisheng2');
     CardDeck.image = new Array(20);  //原图
     CardDeck.image2 = new Array(20);  //缩略图，154 * 240
-    CardDeck.srcDeck = new Array(1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3);
+    CardDeck.srcDeck = new Array(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3);
     //CardDeck.abilityList = new Array('');
     //0: posionous
     //for (var i = 0; i < CardDeck.srcDeck.length; i++)
