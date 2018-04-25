@@ -108,6 +108,7 @@ var game = function(){
         game.rest = playerNum;
         game.now = game.first;
         main.clear();
+        main.infoContext.clearRect(0, 0, 1200, 600);
 
         textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
         main.textContext.clearRect(380, 70, 430, 90);
