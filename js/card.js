@@ -34,6 +34,7 @@ var card = function(){
 var AnimalList = function(){
     AnimalList.nameList = new Array('rabbit', 'rabbit');
     AnimalList.image = new Array(10);
+    AnimalList.imageData = new Array(10);
     AnimalList.name = {
         'water': '水生',
         'hide': '伪装',
@@ -81,4 +82,5 @@ function Animal(tot, x, y){
 var FoodList = function(){
     FoodList.nameList = new Array('yumi');
     FoodList.image = new Array(10);
+    FoodList.imageData = new Array(10);
 };

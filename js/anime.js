@@ -175,7 +175,7 @@ function initFoodAnimation(n){
             return 2 + random(1, 7) + random(1, 7);
         };
     
-    var content1 = '这个月，大地上新生了 ', content2 = ' 食物...';
+    var content1 = '这个月，大地上新生了 ', content2 = ' 份食物...';
     (function animate1(){
         //main.textContext.clearRect(0, 400, 1200, 200);
         cnt = rand();

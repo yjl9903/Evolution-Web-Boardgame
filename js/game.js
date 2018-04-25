@@ -16,12 +16,7 @@ var game = function(){
         main.clear();
         //  button
         var button = $('.next-turn');
-        button.mouseenter(function(e){
-            //e = e || window.event;
-            //e.style.cursor = 'pointer';
-        });
         button.click(function(){
-            //e.style.cursor = 'pointer';
             game.check[game.now] = true;
             game.rest--;
             if (!game.rest)
@@ -71,6 +66,7 @@ var game = function(){
     };
 
     game.set = function(){
+        //transparentImage();
         var color = new Array([255, 30, 30], [131, 111, 255], [0, 238, 0], [238, 238, 238]);
         game.deck = CardDeck.shuffle();
         game.p = new Array(playerNum);
@@ -130,9 +126,6 @@ var game = function(){
         }
         return [-1, -1];
     };
-    game.initFood = function(){
-
-    };
 };
 
 function Player(){
@@ -178,9 +171,11 @@ function Player(){
         newAnimal.ability.size = 0;
         this.score += 2;
         this.ownAnimal.size++;
-        //main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
         DrawAnimal(x, y);
-        var path = new Path2D();
+        //main.context.putImageData(AnimalList.imageData[0], 90, 90);
+        //main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
+        
+        //var path = new Path2D();
         //path.addPath();
         //path.moveTo(x, y);
         //path.lineTo(x + 90, y);
@@ -245,7 +240,7 @@ function food(){
             {
                 flag = 0;
                 food.locX[i] = random(0, 1100);
-                food.locY[i] = random(0, 500);
+                food.locY[i] = random(0, 450);
                 for (var j = 0; j < n; j++)
                     if (i !== j && Math.abs(food.locX[i] - food.locX[j]) <= food.width[i] && Math.abs(food.locY[i] - food.locY[j]) <= food.height[i])
                     {
@@ -255,7 +250,8 @@ function food(){
                 if (!game.isOver2(food.locX[i], food.locY[i], food.width[i], food.height[i]))
                     flag = 1;
             }
-            DrawFood(food.locX[i], food.locY[i]);
+            DrawFood(food.locX[i], food.locY[i], main.foodContext);
+            //main.foodContext.putImageData(FoodList.imageData[0], 75, 75);
         }
         foodCmd(0);
     };
@@ -266,5 +262,17 @@ function food(){
                 return i;
         }
         return -1;
+    };
+
+    food.deleteFood = function(n){
+        food.num--;
+        food.rest.splice(n, 1);
+        food.locX.splice(n, 1);
+        food.locY.splice(n, 1);
+        food.width.splice(n, 1);
+        food.height.splice(n, 1);
+        var content1 = '这个月，大地上剩余了 ', content2 = ' 份食物...';
+        main.textContext.clearRect(380, 70, 430, 90);
+        main.textContext.fillText(content1 + food.num + content2, 600, 100);
     };
 };

@@ -189,13 +189,15 @@ var mapCmd = function(mode, xn, xm){
         return;
     };
 
-    main.gameDiv2.click(function(e){
+    mapCmd.mClick = function(e){
         //console.log(e.clientX - rect.left);
         //console.log(e.clientY - rect.top);
         var mx = e.clientX - rect.left, my = e.clientY - rect.top;
         //var flag = game.p[game.now].inAnimal(mx, my);
         var flag = game.isClickAnimal(mx, my);
         //console.log(flag[0]);
+        if (food.isInFood(mx, my) !== -1)
+            return;
         if (flag[0] > -1)
         {
             var len = game.p[flag[0]].ownAnimal[flag[1]].ability.size;
@@ -218,7 +220,9 @@ var mapCmd = function(mode, xn, xm){
                     location[i][j] = {x: 0, y: 0, width: 0, height: 0};
                 }
         }
-    });
+    };
+    main.gameDiv2.click(mapCmd.mClick);
+    //main.gameDiv2.click(function(e){});
 };
 
 var foodCmd = function(mode){
@@ -230,16 +234,76 @@ var foodCmd = function(mode){
         //console.log(n);
         if (n != -1)
         {
+            var sx = food.locX[n], sy = food.locY[n];
+            //main.gameDiv2.off();
+            DrawFood(food.locX[n], food.locY[n], main.tempContext);
+            main.foodContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
             main.foodDiv.mousemove(function(e){
-                main.foodContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
+                main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
                 mx = e.clientX - rect.left - food.width[n] / 2;
                 my = e.clientY - rect.top - food.height[n] / 2;
                 food.locX[n] = mx;
                 food.locY[n] = my;
-                DrawFood(mx, my);
+                DrawFood(mx, my, main.tempContext);
                 //main.foodContext.drawImage(FoodList.image[0], mx, my, food.width[n], food.height[n]);
             });
             main.foodDiv.mouseup(function(e){
+                main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
+                mx = e.clientX - rect.left;
+                my = e.clientY - rect.top;
+                var flag = game.isClickAnimal(mx, my);
+                var tn = flag[0], tm = flag[1]; //tn玩家，tm动物
+                if (tn != -1)
+                {
+                    main.markContext.font = "20px arial";
+                    main.markContext.fillStyle = "rgba(" + game.p[tn].color[0] + ',' + game.p[tn].color[1] + ',' + game.p[tn].color[2] + ',0.7)';
+                    //main.markContext.fillRect(0,0,100,100);
+                    if (game.p[tn].ownAnimal[tm].totFood < game.p[tn].ownAnimal[tm].foodNeed)
+                    {
+                        //此处为成功喂食
+                        //main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
+                        food.deleteFood(n);
+
+                        console.log(game.p[tn].ownAnimal[tm].locX + ' ' + game.p[tn].ownAnimal[tm].locY + ' ' + game.p[tn].ownAnimal[tm].width);
+                        main.markContext.fillRect(0, 0, 40,40);
+                        main.markContext.fillRect(game.p[tn].ownAnimal[tm].locX + game.p[tn].ownAnimal[tm].width, game.p[tn].ownAnimal.locY, 40,40);
+                        game.p[tn].ownAnimal[tm].totFood++;
+                        //console.log(game.p[n].ownAnimal[m].totFood);
+                        main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, game.p[tn].ownAnimal[tm].locX, game.p[tn].ownAnimal.locY);
+                    }
+                    else
+                    {
+                        food.locX[n] = sx;
+                        food.locY[n] = sy;
+                        DrawFood(sx, sy, main.foodContext);
+                    }
+                }
+                else
+                {
+                    mx = mx - food.width[n] / 2;
+                    my = my - food.height[n] / 2;
+                    var flag = 0;
+                    for (var i = 0; i < food.num; i++)
+                    {
+                        if (n !== i && Math.abs(mx - food.locX[i]) <= food.width[n] && Math.abs(my - food.locY[i]) <= food.height[n])
+                        {
+                            flag = 1;
+                        }
+                    }
+                    if (flag)
+                    {
+                        food.locX[n] = sx;
+                        food.locY[n] = sy;
+                        DrawFood(sx, sy, main.foodContext);
+                    }
+                    else
+                    {
+                        food.locX[n] = mx;
+                        food.locY[n] = my;
+                        DrawFood(mx, my, main.foodContext);
+                    }
+                }
+                //main.gameDiv2.click(mapCmd.mClick);
                 main.foodDiv.off('mousemove');
                 main.foodDiv.off('mouseup');
             });

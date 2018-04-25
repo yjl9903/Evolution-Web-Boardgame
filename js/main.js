@@ -17,6 +17,10 @@ var main = function(){
     main.infoContext = main.infoCanvas.getContext('2d');
     main.foodCanvas = $('.food-canvas')[0];
     main.foodContext = main.foodCanvas.getContext('2d');
+    main.markCanvas = $('.mark-canvas')[0];
+    main.markContext = main.markCanvas.getContext('2d');
+    main.tempCanvas = $('.temp-canvas')[0];
+    main.tempContext = main.tempCanvas.getContext('2d');
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     
@@ -46,6 +50,8 @@ var main = function(){
     {
         AnimalList.image[i] = Loader.loadImage('image/' + AnimalList.nameList[i] + '.png');
         AnimalList.image[i].onload = function(){
+            //AnimalList.imageData[i] = transparentImage(AnimalList.image[i], 90, 90);
+            //console.log(AnimalList.imageData[i].height);
             Loader.itemLoaded();
         };
         AnimalList.image[i].crossOrigin = "anonymous";
@@ -76,7 +82,8 @@ var main = function(){
         //context.drawImage(cardImage[0], 0, 0, 77, 120);
         //handCard(canvas);
         //drag.animate();
-        DrawFood(0, 0);
+        //DrawFood(0, 0);
+        
         game.set();
     }
     else{
@@ -90,6 +97,7 @@ var main = function(){
             //drag.animate();
             //main.foodContext.drawImage(FoodList.image[0], 0, 0, 90, 90);
             //DrawFood(0, 0);
+            
             game.set();
         };
     }
@@ -152,6 +160,56 @@ function random(min, max){
     return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+function transparentImage(img, width, height){
+    /*for (var j = 0; j < AnimalList.nameList.size; j++)
+    {
+        console.log(j);
+        var width = 90, height = 90;
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(AnimalList.image[j], 0, 0, width, height);
+        var datas = ctx.getImageData(0, 0, width, height);
+        for (var i = 0; i < datas.data.length; i += 4)
+        {
+            if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
+                datas.data[i + 3] = 0;
+        }
+        AnimalList.imageData[j] = datas;
+    }
+    for (var j = 0; j < FoodList.nameList.size; j++)
+    {
+        var widht = 75, height = 75;
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(FoodList.image[j], 0, 0, width, height);
+        var datas = ctx.getImageData(0, 0, width, height);
+        for (var i = 0; i < datas.data.length; i += 4)
+        {
+            if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
+                datas.data[i + 3] = 0;
+        }
+        FoodList.imageData[j] = datas;
+    }*/
+    
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(img, 0, 0, width, height);
+    var datas = ctx.getImageData(0, 0, width, height);
+    for (var i = 0; i < datas.data.length; i += 4)
+    {
+        if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
+            datas.data[i + 3] = 0;
+    }
+    //console.log('ok');
+    return datas;
+};
+
 function DrawAnimal(x, y){
     //使用默认大小90*90
     var canvas = document.createElement('canvas');
@@ -171,17 +229,17 @@ function DrawAnimal(x, y){
     textEnter(text, x + 45, y + 90 + 10, 50, 20, 0, main.context, game.p[game.now].color[0], game.p[game.now].color[1], game.p[game.now].color[2]);
 }
 
-function DrawFood(x, y){
+function DrawFood(x, y, context){
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
-    canvas.width = 90;
-    canvas.height = 90;
+    canvas.width = 75;
+    canvas.height = 75;
     ctx.drawImage(FoodList.image[0], 0, 0, 75, 75);
     var datas = ctx.getImageData(0, 0, 75, 75);
     for (var i = 0; i < datas.data.length; i += 4)
         if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
             datas.data[i + 3] = 0;
-    main.foodContext.putImageData(datas, x, y);
+    context.putImageData(datas, x, y);
 };
 /*
 游戏界面右下角，信息滚动面板，记录出牌数据，beta阶段使用console
