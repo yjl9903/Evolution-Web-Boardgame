@@ -15,14 +15,20 @@ var game = function(){
     game.step = new Array(function(){
         main.clear();
         //  button
-        $('.next-turn').click(function(){
+        var button = $('.next-turn');
+        button.mouseenter(function(e){
+            //e = e || window.event;
+            //e.style.cursor = 'pointer';
+        });
+        button.click(function(){
+            //e.style.cursor = 'pointer';
             game.check[game.now] = true;
             game.rest--;
             if (!game.rest)
             {
                 cnt++;
                 textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
-                var button = $('.next-turn');
+                
                 button.attr('disabled', true);  //设置按钮无法点击
                 button.off();
                 game.step[cnt]();
@@ -251,5 +257,14 @@ function food(){
             }
             DrawFood(food.locX[i], food.locY[i]);
         }
+        foodCmd(0);
+    };
+    food.isInFood = function(x, y){
+        for (var i = 0; i < food.num; i++)
+        {
+            if (x > food.locX[i] && y > food.locY[i] && x - food.locX[i] < food.width[i] && y - food.locY[i] < food.height[i])
+                return i;
+        }
+        return -1;
     };
 };

@@ -5,6 +5,7 @@ var main = function(){
     main.cy = 0;
     main.gameDiv = $('.game-div');
     main.gameDiv2 = $('.game-div2');
+    main.foodDiv = $('.food-div');
     main.handDiv = $('.handcard-div');
     main.canvas = $('.game-canvas')[0];
     main.context = main.canvas.getContext('2d');

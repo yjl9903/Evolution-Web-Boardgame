@@ -51,7 +51,7 @@ function Animal(tot, x, y){
     this.type = 0;
     this.father = tot;
     this.ability = new Array(0);
-    this.food = 1;
+    this.foodNeed = 1;
     this.totFood = 0;
     
     this.state = {
@@ -65,7 +65,6 @@ function Animal(tot, x, y){
         home: false,
         run: false
     };
-    
     /*this.meat = false;  //食肉
     this.rob = false;  //劫掠
     //this.grass = false;  //食草

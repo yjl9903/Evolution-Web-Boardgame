@@ -25,6 +25,7 @@ var handCardCmd = function(mode){
         var tot = $(this);
         var i = tot.index();
         var img;
+        tot.css('cursor', 'pointer');
         if (game.p[game.now].handState[i] === 0)
             img = CardDeck.image2[0];
         else if (game.p[game.now].handState[i] === 1)
@@ -205,8 +206,7 @@ var mapCmd = function(mode, xn, xm){
                 location[flag[0]][flag[1]] = {x: tmp[0], y: tmp[1], width: tmp[2], height: tmp[3]};
                 //main.infoContext.fillRect(tmp[0], tmp[1], tmp[2], tmp[3]);
                 checked[flag[0]][flag[1]] = 0;
-            }
-            
+            } 
         }
         else
         {
@@ -222,7 +222,29 @@ var mapCmd = function(mode, xn, xm){
 };
 
 var foodCmd = function(mode){
-    
+    var mx = 0, my = 0, rect = main.canvas.getBoundingClientRect();
+    main.foodDiv.mousedown(function(e){
+        mx = e.clientX - rect.left;
+        my = e.clientY - rect.top;
+        var n = food.isInFood(mx, my);
+        //console.log(n);
+        if (n != -1)
+        {
+            main.foodDiv.mousemove(function(e){
+                main.foodContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
+                mx = e.clientX - rect.left - food.width[n] / 2;
+                my = e.clientY - rect.top - food.height[n] / 2;
+                food.locX[n] = mx;
+                food.locY[n] = my;
+                DrawFood(mx, my);
+                //main.foodContext.drawImage(FoodList.image[0], mx, my, food.width[n], food.height[n]);
+            });
+            main.foodDiv.mouseup(function(e){
+                main.foodDiv.off('mousemove');
+                main.foodDiv.off('mouseup');
+            });
+        }
+    });
 };
 
 var drag = {
