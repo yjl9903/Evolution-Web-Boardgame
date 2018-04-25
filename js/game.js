@@ -13,6 +13,7 @@ var game = function(){
         game.check[i] = false;
 
     game.step = new Array(function(){
+        main.clear();
         //  button
         $('.next-turn').click(function(){
             game.check[game.now] = true;
@@ -39,11 +40,14 @@ var game = function(){
         mapCmd(0);
     }, 
     function(){
+        main.clear();
         topText = '食物阶段...';
-        textEnter(topText, 500, 100, 2000, 30, 3, main.textContext);
+        textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
         handCardCmd(0);
-        foodNum = initFood(playerNum);
-        console.log(foodNum);
+        initFoodAnimation(playerNum);//动画结束时，直接生成食物，食物生成后进入喂食阶段
+        //console.log(foodNum);
+        //food.init();
+        
     }, 
     function(){
 
@@ -95,6 +99,21 @@ var game = function(){
         }
         return true; //无重叠
     };
+    game.isOver2 = function(x, y, width, height){
+        for (var i = 0; i < playerNum; i++)
+        {
+            for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+            {
+                var xx = game.p[i].ownAnimal[j].locX;
+                var yy = game.p[i].ownAnimal[j].locY;
+                var ww = game.p[i].ownAnimal[j].width;
+                var hh = game.p[i].ownAnimal[j].height;
+                if (x - xx < ww && xx - x < width && y - yy < hh && yy - y < height)
+                    return false;
+            }
+        }
+        return true;//无重叠
+    };
     game.isClickAnimal = function(x, y){
         var tmp = -1;
         for (var i = 0; i < playerNum; i++)
@@ -104,6 +123,9 @@ var game = function(){
                 return [i, tmp];
         }
         return [-1, -1];
+    };
+    game.initFood = function(){
+
     };
 };
 
@@ -201,3 +223,33 @@ function Player(){
     };
 };
 
+function food(){
+    food.num = 0;
+    food.init = function(n){
+        food.num = n;
+        food.rest = new Array(n);
+        food.locX = new Array(n), food.locY = new Array(n), food.width = new Array(n), food.height = new Array(n);
+        for (var i = 0; i < n; i++)
+        {
+            //console.log(i);
+            food.width[i] = 75;
+            food.height[i] = 75;
+            var flag = 1;
+            while (flag)
+            {
+                flag = 0;
+                food.locX[i] = random(0, 1100);
+                food.locY[i] = random(0, 500);
+                for (var j = 0; j < n; j++)
+                    if (i !== j && Math.abs(food.locX[i] - food.locX[j]) <= food.width[i] && Math.abs(food.locY[i] - food.locY[j]) <= food.height[i])
+                    {
+                        flag = 1;
+                        break;
+                    }
+                if (!game.isOver2(food.locX[i], food.locY[i], food.width[i], food.height[i]))
+                    flag = 1;
+            }
+            DrawFood(food.locX[i], food.locY[i]);
+        }
+    };
+};

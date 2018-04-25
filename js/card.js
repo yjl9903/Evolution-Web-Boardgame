@@ -79,3 +79,7 @@ function Animal(tot, x, y){
     this.fat = false;  //脂肪*/
 };
 
+var FoodList = function(){
+    FoodList.nameList = new Array('yumi');
+    FoodList.image = new Array(10);
+};

@@ -221,6 +221,10 @@ var mapCmd = function(mode, xn, xm){
     });
 };
 
+var foodCmd = function(mode){
+    
+};
+
 var drag = {
     mx: 0, my: 0,
     width: 77, height: 120,

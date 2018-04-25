@@ -55,7 +55,7 @@ function textEnter(content, locX, locY, width, font, mode, ctx, fontColor1, font
     if (mode === 1)
     {
         sum = 1;
-        (function animate1(){
+        (function animate1(){//500,530,2000,30,0,500,1200,50
             ctx.clearRect(locX - width, locY - font, width * 2, 2 * font - 10);
             ctx.fillStyle = rgba + sum + ")";
             ctx.fillText(content, locX, locY);
@@ -159,8 +159,9 @@ function drawInfo(x, y, n, m){
     return [x, y - arrowY1 - len * unit - arcLen, arrowX + width + arcLen * 2, arrowY1 - arrowY2 + 2 * arcLen + len * unit];
 };
 
-function initFood(n){
-    var cnt, rand, t = 0, flag = false;;
+function initFoodAnimation(n){
+    //main.textContext.clearRect(0, 500, 1200, 50);
+    var cnt, rand, t = 0;
     if (n === 2)
         rand = function(){
             return 2 + random(1, 7);
@@ -176,12 +177,15 @@ function initFood(n){
     
     var content1 = '这个月，大地上新生了 ', content2 = ' 食物...';
     (function animate1(){
+        //main.textContext.clearRect(0, 400, 1200, 200);
         cnt = rand();
-        main.textContext.clearRect(280, 120, 430, 90);
-        main.textContext.fillText(content1 + cnt + content2, 500, 150);
+        main.textContext.clearRect(380, 70, 430, 90);
+        main.textContext.fillText(content1 + cnt + content2, 600, 100);
         t++;
         if (t < 125)
             window.requestAnimationFrame(animate1, main.textCanvas);
+        else
+            food.init(cnt);//动画结束，生成食物
     }());
     return cnt;
 };

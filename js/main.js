@@ -14,6 +14,8 @@ var main = function(){
     main.textContext = main.textCanvas.getContext('2d');
     main.infoCanvas = $('.info-canvas')[0];
     main.infoContext = main.infoCanvas.getContext('2d');
+    main.foodCanvas = $('.food-canvas')[0];
+    main.foodContext = main.foodCanvas.getContext('2d');
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     
@@ -25,6 +27,8 @@ var main = function(){
     // ----------------------------------
     CardDeck();
     AnimalList();
+    FoodList();
+    food();
     game();
     for (var i = 0; i < CardDeck.nameList.length; i++)
     {
@@ -46,6 +50,14 @@ var main = function(){
         AnimalList.image[i].crossOrigin = "anonymous";
         //--allow-file-access-from-files
     }
+    for (var i = 0; i < FoodList.nameList.length; i++)
+    {
+        FoodList.image[i] = Loader.loadImage('image/' + FoodList.nameList[i] + '.png');
+        FoodList.image[i].onload = function(){
+            Loader.itemLoaded();
+        };
+        FoodList.image[i].crossOrigin = "anonymous";
+    }
     // --------------------------------
     //alert(Loader.loadedCount + ' ' + Loader.totalCount);
     
@@ -60,9 +72,10 @@ var main = function(){
 
     if (Loader.loaded){
         //$('.handcard td').html('<img src="image/paibei.jpg" width="77px" height="120px" ondragstart="return false;"/>');
-        context.drawImage(cardImage[0], 0, 0, 77, 120);
+        //context.drawImage(cardImage[0], 0, 0, 77, 120);
         //handCard(canvas);
         //drag.animate();
+        DrawFood(0, 0);
         game.set();
     }
     else{
@@ -70,14 +83,22 @@ var main = function(){
         Loader.onload = function(){
             //$('.handcard td').html('<img src="image/paibei.jpg" width="77px" height="120px" ondragstart="return false;" />');
             //context.drawImage(cardImage[0], 0, 0, 77, 120);
-            context.drawImage(CardDeck.image[0], 0, 0, 77, 120);
+            //context.drawImage(CardDeck.image[0], 0, 0, 77, 120);
             //context.drawImage(CardDeck.image2[1], 400, 0);
             //handCard(canvas);
             //drag.animate();
-
+            //main.foodContext.drawImage(FoodList.image[0], 0, 0, 90, 90);
+            //DrawFood(0, 0);
             game.set();
         };
     }
+
+    main.clear = function(){
+        //main.context.clearRect(0, 0, 1200, 600);
+        main.context2.clearRect(0, 0, 1200, 600);
+        main.foodContext.clearRect(0, 0, 1200, 600);
+        main.textContext.clearRect(0, 0, 1200, 600);
+    };
 };
 
 //资源加载器
@@ -148,6 +169,19 @@ function DrawAnimal(x, y){
     var text = "玩家" + game.now;
     textEnter(text, x + 45, y + 90 + 10, 50, 20, 0, main.context, game.p[game.now].color[0], game.p[game.now].color[1], game.p[game.now].color[2]);
 }
+
+function DrawFood(x, y){
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = 90;
+    canvas.height = 90;
+    ctx.drawImage(FoodList.image[0], 0, 0, 75, 75);
+    var datas = ctx.getImageData(0, 0, 75, 75);
+    for (var i = 0; i < datas.data.length; i += 4)
+        if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
+            datas.data[i + 3] = 0;
+    main.foodContext.putImageData(datas, x, y);
+};
 /*
 游戏界面右下角，信息滚动面板，记录出牌数据，beta阶段使用console
 起始玩家标记 -> 玩家信息面板
