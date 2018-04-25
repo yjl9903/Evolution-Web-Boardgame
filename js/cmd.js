@@ -263,10 +263,12 @@ var foodCmd = function(mode){
                         //此处为成功喂食
                         //main.tempContext.clearRect(food.locX[n], food.locY[n], food.width[n], food.height[n]);
                         food.deleteFood(n);
-
-                        console.log(game.p[tn].ownAnimal[tm].locX + ' ' + game.p[tn].ownAnimal[tm].locY + ' ' + game.p[tn].ownAnimal[tm].width);
+                        
                         main.markContext.fillRect(0, 0, 40,40);
-                        main.markContext.fillRect(game.p[tn].ownAnimal[tm].locX + game.p[tn].ownAnimal[tm].width, game.p[tn].ownAnimal.locY, 40,40);
+                        var markX = game.p[tn].ownAnimal[tm].locX + game.p[tn].ownAnimal[tm].width;
+                        var markY = game.p[tn].ownAnimal[tm].locY;
+                        console.log(markX, markY);
+                        main.markContext.fillRect(markX, markY, 100,100);
                         game.p[tn].ownAnimal[tm].totFood++;
                         //console.log(game.p[n].ownAnimal[m].totFood);
                         main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, game.p[tn].ownAnimal[tm].locX, game.p[tn].ownAnimal.locY);
