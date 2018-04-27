@@ -1,17 +1,18 @@
 var CardDeck = function(){
-    CardDeck.nameList = new Array('paibei', 'meat', 'hide', 'eye', 'water', 'run', 'home', 'poison', 'fat');
+    CardDeck.nameList = new Array('paibei', 'meat', 'hide', 'eye', 'water', 'run', 'home', 'poison', 'fat', 'big');
     //CardDeck.nameList2 = new Array('paibei2', 'shuisheng2');
     CardDeck.image = new Array(20);  //原图
     CardDeck.image2 = new Array(20);  //缩略图，154 * 240
     CardDeck.srcDeck = new Array(
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 2, 
-        3, 3, 3, 3, 3, 
+        2, 2, 2, 2, 
+        3, 3, 3, 3, 
         4, 4, 4, 4, 4, 4, 
         5, 5, 5, 5, 
         6, 6, 6, 6,
         7, 7, 7, 7,
-        8, 8, 8, 8
+        8, 8, 8, 8,
+        9, 9, 9, 9
     );
     //CardDeck.abilityList = new Array('');
     //0: posionous
@@ -67,7 +68,7 @@ function Animal(tot, x, y){
     this.ability = new Array(0);
     this.foodNeed = 1;
     this.totFood = 0;
-    
+
     this.inPoison = 0;
     this.haveEat = 0;
     

@@ -128,7 +128,8 @@ function drawInfo(x, y, n, m){
         'run': '擅跑',
         'home': '穴居',
         'poison': '有毒',
-        'fat': '脂肪'
+        'fat': '脂肪',
+        'big': '巨化'
     };
 
     //console.log(len);

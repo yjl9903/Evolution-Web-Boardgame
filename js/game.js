@@ -131,6 +131,7 @@ var game = function(){
     }, 
     function(){//阶段2
         game.rest = playerNum;
+        game.first = (game.first + 1) % playerNum;
         game.now = game.first;
         main.clear();
         main.infoContext.clearRect(0, 0, 1200, 600);
@@ -373,11 +374,20 @@ var game = function(){
             {
                 flag += 1;
             }
+            if (tag.state['big'])
+            {
+                if (own.state['big'])
+                    flag += 1;
+            }
+            else
+            {
+                flag += 1;
+            }
 
             if (tag.state['poison'])
                 own.inPoison = 1;
 
-            if (flag === 4)
+            if (flag === 5)
                 return true;
             else
                 return false;
@@ -450,7 +460,8 @@ function Player(){
         'run': '擅跑',
         'home': '穴居',
         'poison': '有毒',
-        'fat': '脂肪'
+        'fat': '脂肪',
+        'big': '巨化'
     };
 
     this.showHand = function(){

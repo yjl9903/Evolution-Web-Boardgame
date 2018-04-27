@@ -57,6 +57,7 @@ var handCardCmd = function(mode){
             var sx = e.clientX - rect.left -36, sy = e.clientY - rect.top - 60, flag = false;
             var mx = sx, my = sy;
             var tot = $(this), html;
+            var totRect = tot[0].getBoundingClientRect();
             var i = tot.index();
             var img;
             if (game.p[game.now].handState[i] === 0)
@@ -74,7 +75,7 @@ var handCardCmd = function(mode){
                     if (Math.abs(x - sx) >= 4 || Math.abs(y - sy) >= 4)
                     {
                         flag = true;
-                        main.context2.clearRect(f[i] - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+                        main.context2.clearRect(totRect.left - rect.left - 36, 585 - 120 - rect.top - 100, 155, 240);
                         html = tot.html();
                         tot.html('');
                         td.off('mouseleave');
