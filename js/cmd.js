@@ -290,6 +290,7 @@ var foodCmd = function(mode){
                         main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, markX, markY);
                         game.pFlag[game.now] = 1;
                         Board.addText('玩家 ' + game.now + ' 的动物吃掉了食物...', game.now);
+                        game.switch(1);
                     }
                     else
                     {
@@ -430,6 +431,8 @@ var attackCmd = function(mode){
                             game.p[n].ownAnimal[m].totFood = game.p[n].ownAnimal[m].foodNeed;
                         main.markContext.clearRect(markX, markY - 20, 20 ,20);
                         main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
+                        //切换玩家
+                        game.switch(1);
                     }
                     else
                     {

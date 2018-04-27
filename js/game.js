@@ -57,7 +57,28 @@ var game = function(){
         game.now = game.first;
         game.rest = playerNum;
         //-------初始化
-        var nextPlayer = $('.next-turn'), nextTurn = $('.next-player');
+        var button = $('.next-turn');
+        button.click(function(){
+            game.check[game.now] = true;
+            game.rest--;
+            if (!game.rest)
+            {
+                //for (var i = 0; i < playerNum; i++)
+                //    for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+                //        game.p[i].ownAnimal[j].totFood = 0;
+                $('.attack-div').off();
+                textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
+                button.attr('disabled', true);  //设置按钮无法点击
+                button.off();
+                cnt++;
+                game.step[cnt]();
+            }
+            else
+            {
+                game.switch();
+            }
+        });
+        /*var nextPlayer = $('.next-turn'), nextTurn = $('.next-player');
         //nextPlayer.attr('disabled', false);
         nextPlayer.click(function(){
             game.pFlag[game.now] = 0;
@@ -97,7 +118,8 @@ var game = function(){
             {
                 game.switch();
             }
-        });
+        });*/
+        //
         textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
         topText = '喂食阶段...';
         textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
@@ -194,7 +216,11 @@ var game = function(){
         });
     });
 
-    game.switch = function(){
+    game.switch = function(mode){
+        if (mode)
+        {
+            game.pFlag[game.now] = 0;
+        }
         var p = game.now + 1;
         while (game.check[p % playerNum])
             p++;
@@ -363,7 +389,48 @@ var game = function(){
     };
 
     game.over = function(){
-
+        main.context.font = "100px Microsoft YaHei";
+        main.context.textAlign = "center";
+        main.context.fillStyle = "rgba(0, 0, 0, 1)";
+        main.context.clearRect(0, 0, 1200, 600);
+        main.context2.clearRect(0, 0, 1200, 600);
+        main.textContext.clearRect(0, 0, 1200, 600);
+        main.infoContext.clearRect(0, 0, 1200, 600);
+        main.foodContext.clearRect(0, 0, 1200, 600);
+        main.markContext.clearRect(0, 0, 1200, 600);
+        main.tempContext.clearRect(0, 0, 1200, 600);
+        
+        var score = new Array(playerNum), max = 0, maxN = 0;
+        for (var i = 0; i < playerNum; i++)
+        {
+            score[i] = 0;
+            for (var j = 0; j < game.p[i].ownAnimal.size; i++)
+            {
+                score[i] += 2;
+                for (var k = 0; k < game.p[i].ownAnimal[j].ability.size; k++)
+                {
+                    score[i]++;
+                    if (game.p[i].ownAnimal[j].ability[k] === 'meat' || game.p[i].ownAnimal[j].ability[k] === 'big')
+                        score[i]++;
+                }
+            }
+            if (score[i] > max)
+            {
+                max = score[i];
+                maxN = i;
+            }
+        }
+        main.context.fillText('小行星来袭', 600, 260);
+        main.context.font = "50px Microsoft YaHei";
+        for (var i = 0; i < playerNum; i++)
+        {
+            var text = '';
+            if (i === maxN)
+                text = '☆ ';
+            text += "玩家 " + i + " : " + score[i];
+            main.context.fillStyle = "rgba(" + game.p[i].color[0] + ',' + game.p[i].color[1] + ',' + game.p[i].color[2] + ',1)';
+            main.context.fillText(text, 600, 360 + 60 * i);
+        }
     };
 };
 
@@ -419,9 +486,12 @@ function Player(){
         {
             if (game.deck.length)
             {
-                this.hand.push(game.deck.pop());
-                this.handState[this.hand.size] = 1;
-                this.hand.size++;
+                if (this.hand.size < 10)
+                {
+                    this.hand.push(game.deck.pop());
+                    this.handState[this.hand.size] = 1;
+                    this.hand.size++;
+                }
             }
             else
             {
