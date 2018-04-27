@@ -399,7 +399,9 @@ var game = function(){
         main.foodContext.clearRect(0, 0, 1200, 600);
         main.markContext.clearRect(0, 0, 1200, 600);
         main.tempContext.clearRect(0, 0, 1200, 600);
-        
+        $('div').off();
+        $('td').off();
+
         var score = new Array(playerNum), max = 0, maxN = 0;
         for (var i = 0; i < playerNum; i++)
         {
@@ -463,6 +465,8 @@ function Player(){
             td = td.next();
         }
 
+        var left = 26 - 3 * (this.hand.size - 6);
+        $('.handcard').css('left', left + '%');
         /*for (var i = 0; i < this.hand.size; i++)
         {
             //console.log(this.hand[i]);
