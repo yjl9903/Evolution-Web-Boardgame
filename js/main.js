@@ -24,6 +24,10 @@ var main = function(){
     var canvas = $('.game-canvas')[0];
     var context = canvas.getContext('2d');
     
+    main.ws = new WebSocket('ws://www.ltfnjust.club:2333');
+    main.ws.onopen = function(){
+        console.log('Connect OK!');
+    };
     /*cardImage[0] = Loader.loadImage('image/paibei.jpg');
     cardImage[0].onload = function(){
         //alert(5);
@@ -37,7 +41,7 @@ var main = function(){
     game();
     for (var i = 0; i < CardDeck.nameList.length; i++)
     {
-        CardDeck.image[i] = Loader.loadImage('image/' + CardDeck.nameList[i] + '.jpg');
+        CardDeck.image[i] = Loader.loadImage('image/' + CardDeck.nameList[i] + '.png');
         CardDeck.image[i].onload = function(){
             Loader.itemLoaded();
         };
@@ -97,7 +101,7 @@ var main = function(){
             //drag.animate();
             //main.foodContext.drawImage(FoodList.image[0], 0, 0, 90, 90);
             //DrawFood(0, 0);
-            
+            main.context.drawImage(AnimalList.image[0], 0, 0, 90, 90);
             game.set();
         };
     }
