@@ -68,6 +68,9 @@ function Animal(tot, x, y){
     this.foodNeed = 1;
     this.totFood = 0;
     
+    this.inPoison = 0;
+    this.haveEat = 0;
+    
     this.state = {
         meat: false,
         rob: false,

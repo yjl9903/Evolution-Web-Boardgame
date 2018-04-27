@@ -1,5 +1,10 @@
 *{margin: 0; padding: 0;}
 body{background-color: aqua;}
+img{-moz-user-select: none;   
+    -webkit-user-select: none;   
+    -ms-user-select: none;   
+    -khtml-user-select: none;   
+    user-select: none;  }
 .top{background-color: aquamarine;}
 
 h1{text-align: center;}
@@ -7,6 +12,8 @@ h1{text-align: center;}
 .game-div{margin: 0 auto; width: 1200px; height: 600px; /*border: 5px solid green;*/ position:relative;}
 .game-div2{width: 1200px; height: 600px; /*border: 2px yellowgreen solid;*/}
 .food-div{width: 1200px; height: 600px; /*border: 2px greenyellow solid;*/}
+.attack-div{width: 1200px; height: 600px;}
+
 .game-canvas{
     border: 1px solid black; background-image: url(background.png); background-repeat: no-repeat;
     position: absolute; z-index: -10;

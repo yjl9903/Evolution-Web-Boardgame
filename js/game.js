@@ -85,6 +85,7 @@ var game = function(){
                 //for (var i = 0; i < playerNum; i++)
                 //    for (var j = 0; j < game.p[i].ownAnimal.size; j++)
                 //        game.p[i].ownAnimal[j].totFood = 0;
+                $('.attack-div').off();
                 cnt++;
                 textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
                 nextPlayer.attr('disabled', true);  //设置按钮无法点击
@@ -101,6 +102,7 @@ var game = function(){
         topText = '喂食阶段...';
         textEnter(topText, 600, 50, 2000, 30, 3, main.textContext);
         handCardCmd(0);
+        attackCmd();
         initFoodAnimation(playerNum);//动画结束时，直接生成食物，食物生成后进入喂食阶段
         curText = '玩家 ' + game.now + ' 正在进行回合...';
         //food.init();
@@ -128,9 +130,19 @@ var game = function(){
                     game.p[i].ownAnimal.size--;
                     j--;
                 }
+                else if (game.p[i].ownAnimal[j].inPoison)
+                {
+                    Board.addText('玩家' + i + '的动物中毒了...', i);
+                    animalDie(i, j);
+                    game.p[i].ownAnimal.splice(j, 1);
+                    game.p[i].ownAnimal.size--;
+                    j--;          
+                }
                 else
                 {
+                    //恢复上回合状态
                     game.p[i].ownAnimal[j].totFood = 0;
+                    game.p[i].ownAnimal[j].haveEat = 0;
                 }
             }
         }
@@ -250,6 +262,27 @@ var game = function(){
         }
         return true;//无重叠
     };
+    game.isOver3 = function(x, y, width, height, n, m){
+        for (var i = 0; i < playerNum; i++)
+        {
+
+                for (var j = 0; j < game.p[i].ownAnimal.size; j++)
+                {
+                    if (i !== n || j !== m)
+                    {
+                        var xx = game.p[i].ownAnimal[j].locX;
+                        var yy = game.p[i].ownAnimal[j].locY;
+                        var ww = game.p[i].ownAnimal[j].width;
+                        var hh = game.p[i].ownAnimal[j].height;
+                        if (x - xx < ww && xx - x < width && y - yy < hh && yy - y < height)
+                            return false;
+                    }
+                }
+        }
+        return true;//无重叠
+    };
+
+
     game.isClickAnimal = function(x, y){
         var tmp = -1;
         for (var i = 0; i < playerNum; i++)
@@ -259,6 +292,75 @@ var game = function(){
                 return [i, tmp];
         }
         return [-1, -1];
+    };
+    game.isClickAnimal2 = function(x, y, n){
+        var tmp = -1;
+        for (var i = 0; i < playerNum; i++)
+        {
+            if (i !== n)
+            {
+                tmp = game.p[i].inAnimal(x, y);
+                if (tmp != -1)
+                    return [i, tmp];
+            }
+       }
+        return [-1, -1];
+    };
+
+    game.isEat = function(own, tag){
+        if (own.state['meat'])
+        {
+            var flag = 0;
+            if (tag.state['hide'])
+            {
+                if (own.state['eye'])
+                    flag += 1;
+            }
+            else
+            {
+                flag += 1;
+            }
+            if (tag.state['water'])
+            {
+                if (own.state['water'])
+                    flag += 1;
+            }
+            else
+            {
+                flag += 1;
+            }
+            if (tag.state['home'])
+            {
+                if (tag.totFood < tag.foodNeed)
+                    flag += 1;
+            }
+            else
+            {
+                flag += 1;
+            }
+            if (tag.state['run'])
+            {
+                var x = random(1, 6);
+                if (x < 4)
+                    flag += 1;
+            }
+            else
+            {
+                flag += 1;
+            }
+
+            if (tag.state['poison'])
+                own.inPoison = 1;
+
+            if (flag === 4)
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            return false;
+        }
     };
 
     game.over = function(){

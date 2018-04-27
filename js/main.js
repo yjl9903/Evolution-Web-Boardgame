@@ -236,7 +236,7 @@ function DrawAnimal(x, y){
     //main.context.putImageData(datas, x, y);
     main.context.drawImage(AnimalList.image[0], x, y, 90, 90);
     var text = "玩家" + game.now;
-    textEnter(text, x + 45, y + 90 + 10, 50, 20, 0, main.context, game.p[game.now].color[0], game.p[game.now].color[1], game.p[game.now].color[2]);
+    textEnter(text, x + 45, y + 90 + 11, 50, 20, 0, main.context, game.p[game.now].color[0], game.p[game.now].color[1], game.p[game.now].color[2]);
 }
 
 function DrawFood(x, y, context){

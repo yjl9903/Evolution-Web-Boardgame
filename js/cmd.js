@@ -183,7 +183,6 @@ var mapCmd = function(mode, xn, xm){
     }
 
     mapCmd.mode1 = function(xn, xm){
-        console.log(222222);
         //if (!checked[xn][xm])
         //{
             main.infoContext.clearRect(location[xn][xm].x, location[xn][xm].y, location[xn][xm].width, location[xn][xm].height);
@@ -230,6 +229,16 @@ var mapCmd = function(mode, xn, xm){
     main.gameDiv2.off();
     main.gameDiv2.click(mapCmd.mClick);
     //main.gameDiv2.click(function(e){});
+
+    mapCmd.set = function(){
+        main.infoContext.clearRect(0, 0, 1200, 600);
+            for (var i = 0; i < 6; i++)
+                for (var j = 0; j < 20; j++)
+                {
+                    checked[i][j] = 1;
+                    location[i][j] = {x: 0, y: 0, width: 0, height: 0};
+                }
+    };
 };
 
 var foodCmd = function(mode){
@@ -329,7 +338,135 @@ var foodCmd = function(mode){
 };
 
 var attackCmd = function(mode){
+    var rect = main.canvas.getBoundingClientRect(); 
+    var div = $('.attack-div');
+    div.off();
 
+    div.mousedown(function(e){
+        var sx = e.clientX - rect.left;
+        var sy = e.clientY - rect.top;
+        var flag = game.isClickAnimal(sx, sy);
+        //console.log(flag[0] + ' ' + flag[1]);
+        if (flag[0] === game.now)
+        { 
+            var n = flag[0], m = flag[1];
+            var fx = game.p[n].ownAnimal[m].locX;
+            var fy = game.p[n].ownAnimal[m].locY;
+            //main.context.clearRect(fx, fy, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+            if (game.p[n].ownAnimal[m].haveEat)
+                return;
+
+            div.mousemove(function(ev){
+                var mx = ev.clientX - rect.left;
+                var my = ev.clientY - rect.top;
+                //console.log(n + ' ' + m);
+                var nx = game.p[n].ownAnimal[m].locX;
+                var ny = game.p[n].ownAnimal[m].locY;
+                //console.log(mx + ' ' + my);
+                if (Math.abs(mx - sx) >= 5 && Math.abs(my - sy) >= 5)
+                {
+                    mapCmd.set();
+                    mx = mx - game.p[n].ownAnimal[m].width / 2;
+                    my = my - game.p[n].ownAnimal[m].height / 2;
+                    main.context.clearRect(nx, ny, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                    //main.context.clearRect(fx, fy, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                    //console.log(mx + ' ' + my);
+                    //console.log(2);
+                
+                    div.off('mousemove');
+                    div.mousemove(function(e){
+                        main.tempContext.clearRect(mx, my, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                        mx = e.clientX - rect.left - game.p[n].ownAnimal[m].width / 2;
+                        my = e.clientY - rect.top - game.p[n].ownAnimal[m].height / 2;
+                        main.tempContext.drawImage(AnimalList.image[0], mx, my, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height);
+                        game.p[n].ownAnimal[m].locX = mx;
+                        game.p[n].ownAnimal[m].locY = my;
+                    });
+                }
+            });
+
+            div.mouseup(function(e){
+                var mx = e.clientX - rect.left - game.p[n].ownAnimal[m].width / 2;
+                var my = e.clientY - rect.top - game.p[n].ownAnimal[m].height / 2;
+                var flag2 = game.isClickAnimal2(mx + game.p[n].ownAnimal[m].width / 2, my + game.p[n].ownAnimal[m].height / 2, n);
+                //console.log(game.isOver3(mx, my, 90, 90, n, m));
+                //console.log(flag2[0]);
+                
+                if (flag2[0] !== game.now && flag2[0] !== -1 && game.pFlag[n] === 0)
+                {
+                    //console.log(1);
+                    //点击到了其他动物
+                    game.p[n].ownAnimal[m].haveEat = 1;
+                    game.pFlag[n] = 1;//本轮已经行动
+                    var tagN = flag2[0], tagM = flag2[1];
+                    var own = game.p[n].ownAnimal[m], tag = game.p[tagN].ownAnimal[tagM];
+                    if (game.isEat(own, tag))
+                    {
+                        Board.addText('玩家 ' + n + ' 的动物成功捕猎...', n);
+                        Board.addText('玩家 ' + tagN + ' 的动物被吃掉了...', tagN);
+                        //目标动物死亡-----------
+                        //main.context2.fillRect(game.p[tagN].ownAnimal[tagM].locX, game.p[tagN].ownAnimal[tagM].locY, game.p[tagN].ownAnimal[tagM].width, game.p[tagN].ownAnimal[tagM].height + 13);
+                        animalDie(tagN, tagM);
+                        game.p[tagN].ownAnimal.splice(tagM, 1);
+                        game.p[tagN].ownAnimal.size--;
+                        //绘制动物------------
+                        main.context.drawImage(AnimalList.image[0], mx, my, 90, 90);
+                        textEnter("玩家" + n, mx + 45, my + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
+                        game.p[n].ownAnimal[m].locX = mx;
+                        game.p[n].ownAnimal[m].locY = my;
+                        //main.context.fillRect(mx, my, 90, 90);
+
+                        //喂食-----------------
+                        main.markContext.font = "20px arial";
+                        main.markContext.fillStyle = "rgba(" + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',0.9)';
+                        var markX = game.p[n].ownAnimal[m].locX;
+                        var markY = game.p[n].ownAnimal[m].locY + 30;
+                        game.p[n].ownAnimal[m].totFood += 2;
+                        main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                        main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
+                    }
+                    else
+                    {
+                        //console.log(2);
+                        Board.addText('玩家 ' + n + ' 的动物捕猎失败...', n);
+                        Board.addText('玩家 ' + tagN + ' 的动物躲避了攻击...', tagN);
+                        main.tempContext.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                        main.context.drawImage(AnimalList.image[0], fx, fy, 90, 90);
+                        textEnter("玩家" + n, fx + 45, fy + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
+                        game.p[n].ownAnimal[m].locX = fx;
+                        game.p[n].ownAnimal[m].locY = fy;
+                    }
+                }
+                else if (game.isOver3(mx, my, 90, 90, n, m))
+                {
+                    //console.log(3);
+                    //未点击无重叠
+                    //console.log(2);
+                    main.tempContext.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                    //DrawAnimal(mx, my);
+                    main.context.drawImage(AnimalList.image[0], mx, my, 90, 90);
+                    textEnter("玩家" + n, mx + 45, my + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
+                    game.p[n].ownAnimal[m].locX = mx;
+                    game.p[n].ownAnimal[m].locY = my;
+                }
+                else
+                {
+                    //console.log(4);
+                    //未点击，有重叠
+                    //console.log(3);
+                    //main.context.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                    main.tempContext.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+                    main.context.drawImage(AnimalList.image[0], fx, fy, 90, 90);
+                    textEnter("玩家" + n, fx + 45, fy + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
+                    game.p[n].ownAnimal[m].locX = fx;
+                    game.p[n].ownAnimal[m].locY = fy;
+                }
+                
+                div.off('mousemove');
+                div.off('mouseup')
+            });
+        }
+    });
 };
 
 var drag = {

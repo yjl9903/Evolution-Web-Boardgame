@@ -79,6 +79,11 @@ function textEnter(content, locX, locY, width, font, mode, ctx, fontColor1, font
             }
         }());
     }
+    else if (mode === 2)
+    {
+        ctx.fillStyle = rgba + "1)";
+        ctx.fillText(content, locX, locY);
+    }
     else if (mode === 4)
     {
         sum = 1;
