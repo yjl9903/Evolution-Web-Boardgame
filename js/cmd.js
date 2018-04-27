@@ -452,7 +452,7 @@ var attackCmd = function(mode){
                             main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
                     }
                 }
-                else if (game.isOver3(mx, my, 90, 90, n, m))
+                else if (game.isOver3(mx, my, 90, 90, n, m) && food.isOver(mx, my, 90, 90))
                 {
                     //console.log(3);
                     //未点击无重叠

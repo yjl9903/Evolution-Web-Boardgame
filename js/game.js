@@ -282,7 +282,6 @@ var game = function(){
         return true;//无重叠
     };
 
-
     game.isClickAnimal = function(x, y){
         var tmp = -1;
         for (var i = 0; i < playerNum; i++)
@@ -540,6 +539,19 @@ function food(){
                 return i;
         }
         return -1;
+    };
+
+    food.isOver = function(x, y, width, height){
+        for (var i = 0; i < food.num; i++)
+        {
+            var xx = food.locX[i];
+            var yy = food.locY[i];
+            var ww = food.width[i];
+            var hh = food.height[i];
+            if (x - xx < ww && xx - x < width && y - yy < hh && yy - y < height)
+                return false;
+        }
+        return true; //未覆盖
     };
 
     food.deleteFood = function(n){
