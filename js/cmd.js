@@ -349,6 +349,7 @@ var attackCmd = function(mode){
         //console.log(flag[0] + ' ' + flag[1]);
         if (flag[0] === game.now)
         { 
+            mapCmd.set();
             var n = flag[0], m = flag[1];
             var fx = game.p[n].ownAnimal[m].locX;
             var fy = game.p[n].ownAnimal[m].locY;
@@ -365,9 +366,12 @@ var attackCmd = function(mode){
                 //console.log(mx + ' ' + my);
                 if (Math.abs(mx - sx) >= 5 && Math.abs(my - sy) >= 5)
                 {
-                    mapCmd.set();
                     mx = mx - game.p[n].ownAnimal[m].width / 2;
                     my = my - game.p[n].ownAnimal[m].height / 2;
+                    
+                    var markX = game.p[n].ownAnimal[m].locX;
+                    var markY = game.p[n].ownAnimal[m].locY + 30;
+                    main.markContext.clearRect(markX, markY - 20, 20 ,20);
                     main.context.clearRect(nx, ny, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     //main.context.clearRect(fx, fy, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     //console.log(mx + ' ' + my);
@@ -422,12 +426,14 @@ var attackCmd = function(mode){
                         var markX = game.p[n].ownAnimal[m].locX;
                         var markY = game.p[n].ownAnimal[m].locY + 30;
                         game.p[n].ownAnimal[m].totFood += 2;
+                        if (game.p[n].ownAnimal[m].totFood > game.p[n].ownAnimal[m].foodNeed)
+                            game.p[n].ownAnimal[m].totFood = game.p[n].ownAnimal[m].foodNeed;
                         main.markContext.clearRect(markX, markY - 20, 20 ,20);
                         main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
                     }
                     else
                     {
-                        //console.log(2);
+                        console.log(2);
                         Board.addText('玩家 ' + n + ' 的动物捕猎失败...', n);
                         Board.addText('玩家 ' + tagN + ' 的动物躲避了攻击...', tagN);
                         main.tempContext.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
@@ -435,6 +441,15 @@ var attackCmd = function(mode){
                         textEnter("玩家" + n, fx + 45, fy + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
                         game.p[n].ownAnimal[m].locX = fx;
                         game.p[n].ownAnimal[m].locY = fy;
+                        
+                        //喂食-----------------
+                        main.markContext.font = "20px arial";
+                        main.markContext.fillStyle = "rgba(" + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',0.9)';
+                        var markX = game.p[n].ownAnimal[m].locX;
+                        var markY = game.p[n].ownAnimal[m].locY + 30;
+                        main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                        if (game.p[n].ownAnimal[m].totFood)
+                            main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
                     }
                 }
                 else if (game.isOver3(mx, my, 90, 90, n, m))
@@ -442,16 +457,26 @@ var attackCmd = function(mode){
                     //console.log(3);
                     //未点击无重叠
                     //console.log(2);
+                    main.context.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     main.tempContext.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     //DrawAnimal(mx, my);
                     main.context.drawImage(AnimalList.image[0], mx, my, 90, 90);
                     textEnter("玩家" + n, mx + 45, my + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
                     game.p[n].ownAnimal[m].locX = mx;
                     game.p[n].ownAnimal[m].locY = my;
+
+                    //喂食-----------------
+                    main.markContext.font = "20px arial";
+                    main.markContext.fillStyle = "rgba(" + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',0.9)';
+                    var markX = game.p[n].ownAnimal[m].locX;
+                    var markY = game.p[n].ownAnimal[m].locY + 30;
+                    main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                    if (game.p[n].ownAnimal[m].totFood)
+                        main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
                 }
                 else
                 {
-                    //console.log(4);
+                    console.log(4);
                     //未点击，有重叠
                     //console.log(3);
                     //main.context.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
@@ -460,6 +485,15 @@ var attackCmd = function(mode){
                     textEnter("玩家" + n, fx + 45, fy + 90 + 11, 50, 20, 2, main.context, game.p[n].color[0], game.p[n].color[1], game.p[n].color[2]);
                     game.p[n].ownAnimal[m].locX = fx;
                     game.p[n].ownAnimal[m].locY = fy;
+
+                    //喂食-----------------
+                    main.markContext.font = "20px arial";
+                    main.markContext.fillStyle = "rgba(" + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',0.9)';
+                    var markX = game.p[n].ownAnimal[m].locX;
+                    var markY = game.p[n].ownAnimal[m].locY + 30;
+                    main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                    if (game.p[n].ownAnimal[m].totFood)
+                        main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
                 }
                 
                 div.off('mousemove');
