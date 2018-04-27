@@ -38,6 +38,7 @@ var main = function(){
     AnimalList();
     FoodList();
     food();
+    Board();
     game();
     for (var i = 0; i < CardDeck.nameList.length; i++)
     {
@@ -101,7 +102,9 @@ var main = function(){
             //drag.animate();
             //main.foodContext.drawImage(FoodList.image[0], 0, 0, 90, 90);
             //DrawFood(0, 0);
-            main.context.drawImage(AnimalList.image[0], 0, 0, 90, 90);
+            //Board.addText('1');
+            //main.context.drawImage(AnimalList.image[0], 0, 0, 90, 90);
+            //main.context.fillRect(900, 440, 300, 145);
             game.set();
         };
     }
@@ -218,7 +221,7 @@ function transparentImage(img, width, height){
 
 function DrawAnimal(x, y){
     //使用默认大小90*90
-    var canvas = document.createElement('canvas');
+    /*var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     canvas.width = 90;
     canvas.height = 90;
@@ -229,8 +232,9 @@ function DrawAnimal(x, y){
         //datas.data[i] = 100;
         if (datas.data[i] === 255 && datas.data[i + 1] === 255 && datas.data[i + 2] === 255)
             datas.data[i + 3] = 0;
-    }
-    main.context.putImageData(datas, x, y);
+    }*/
+    //main.context.putImageData(datas, x, y);
+    main.context.drawImage(AnimalList.image[0], x, y, 90, 90);
     var text = "玩家" + game.now;
     textEnter(text, x + 45, y + 90 + 10, 50, 20, 0, main.context, game.p[game.now].color[0], game.p[game.now].color[1], game.p[game.now].color[2]);
 }

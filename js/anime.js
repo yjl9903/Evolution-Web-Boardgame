@@ -116,10 +116,14 @@ function drawInfo(x, y, n, m){
     var unit = 20, arrowX = 20, arrowY1 = 20 * Math.sqrt(3), arrowY2 = 20 / Math.sqrt(3), width = 50, arcLen = 20;
     var len = game.p[n].ownAnimal[m].ability.size - 1;
     var name = {
-        'water': '水生',
+        'meat': '食肉',
         'hide': '伪装',
         'eye': '锐目',
-        'run': '擅跑'
+        'water': '水生',
+        'run': '擅跑',
+        'home': '穴居',
+        'poison': '有毒',
+        'fat': '脂肪'
     };
 
     //console.log(len);
@@ -192,4 +196,56 @@ function initFoodAnimation(n){
 
 function animalDie(n, m){
     main.context.clearRect(game.p[n].ownAnimal[m].locX, game.p[n].ownAnimal[m].locY, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
+};
+
+function Board(){
+    var canvas = $('.board-canvas')[0];
+    var ctx = canvas.getContext('2d');
+    var offset = new Array(-120, -90, -60, -30, 0, 30);
+    Board.text = new Array(' ', ' ', ' ', ' ', ' ');
+    Board.color = new Array("rgba(51,51,51,", "rgba(51,51,51,", "rgba(51,51,51,", "rgba(51,51,51,", "rgba(51,51,51,");
+    ctx.font = "20px Microsoft YaHei";
+    ctx.fillStyle = Board.color[0] +  "0.9)";
+
+    Board.addText = function(str, n){
+        //console.log(n);
+        var dx = 0, sum = 30, tot = 0, color = 'rgba(' + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',';
+        (function animate5(){
+            //console.log(color[0]);
+            //fillRect(900, 440, 300, 145);
+            ctx.clearRect(0, 0, 1200, 600);
+            tot = sum / 30 * 0.9;
+            ctx.fillStyle = Board.color[0] + ' ' + tot + ")";
+            ctx.fillText(Board.text[0], 920, 460 - dx);
+            //ctx.fillStyle = color + "0.9)";
+            for (var i = 1; i < 5; i++)
+            {
+                //console.log(color[i]);
+                ctx.fillStyle = Board.color[i] + '0.9)';
+                ctx.fillText(Board.text[i], 920, 580 + offset[i] - dx);
+            }
+            tot = (30 - sum) / 30 * 0.9;
+            ctx.fillStyle = color + ' ' + tot + ")";
+            ctx.fillText(str, 920, 580 + offset[5] - dx);
+            ctx.clearRect(900, 585, 300, 20);
+            ctx.clearRect(900, 400, 300, 40);
+
+            dx++;
+            sum--;
+            //console.log('ok');
+            if (dx < 30)
+                window.requestAnimationFrame(animate5, canvas);
+            else
+            {
+                for (var i = 1; i < 5; i++)
+                {
+                    Board.text[i - 1] = Board.text[i];
+                    Board.color[i - 1] = Board.color[i];
+                    console.log()
+                }
+                Board.text[4] = str;
+                Board.color[4] = color;
+            }
+        }());
+    };
 };

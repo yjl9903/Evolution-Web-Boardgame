@@ -9,6 +9,7 @@ var game = function(){
     game.p;
     game.pFlag = new Array(playerNum);
     game.check = new Array(4);
+    game.end = 0;
     
     for (var i = 0; i < playerNum; i++)
         game.check[i] = false;
@@ -121,6 +122,7 @@ var game = function(){
             {
                 if (game.p[i].ownAnimal[j].totFood < game.p[i].ownAnimal[j].foodNeed)
                 {
+                    Board.addText('玩家' + i + '的动物饿死了...', i);
                     animalDie(i, j);
                     game.p[i].ownAnimal.splice(j, 1);
                     game.p[i].ownAnimal.size--;
@@ -135,37 +137,47 @@ var game = function(){
         for (var i = 0; i < playerNum; i++)
         {
             game.p[i].drawCard(game.p[i].ownAnimal.size + 1);
+            if (game.p[i].ownAnimal.size === 0 && game.p[i].hand.size === 0)
+                game.p[i].drawCard(5);
         }
-
-        for (var i = 0; i < 9; i++)
-        {
-            //console.log(game.p[0].handState[i]);
-            //console.log(game.p[1].handState[i])
-        }
-
-        curText = "点击下回合以确认手牌...";
+        curText = "点击下回合...";
         textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
         var button = $('.next-turn');
         button.attr('disabled', false)
         button.click(function(){
-            console.log(game.now);
-            if (game.rest === 0)
+            //console.log(game.now);
+            //if (game.rest === 0)
+            //{
+            game.now = game.first;
+            game.rest = playerNum;
+            button.attr('disabled', true)
+            button.off();
+
+            if (game.end === 1)
             {
-                game.now = game.first;
-                game.rest = playerNum;
-                button.attr('disabled', true)
-                button.off();
+                game.end = 2;
                 cnt = 0;
                 game.step[cnt]();
                 return;
             }
-            textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
-            curText = '玩家 ' + game.now + ' 正在确认手牌...';
-            textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
-            game.p[game.now].showHand();
-            handCardCmd(0);
-            game.rest--;
-            game.now = (game.now + 1) % playerNum
+            else if (game.end === 2)
+            {
+
+            }
+            else
+            {
+                cnt = 0;
+                game.step[cnt]();
+                return;
+            }
+            //}
+            //textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
+            //curText = '玩家 ' + game.now + ' 正在确认手牌...';
+            //textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
+            //game.p[game.now].showHand();
+            //handCardCmd(0);
+            //game.rest--;
+            //game.now = (game.now + 1) % playerNum
             //console.log(game.rest);
         });
     });
@@ -248,6 +260,10 @@ var game = function(){
         }
         return [-1, -1];
     };
+
+    game.over = function(){
+
+    };
 };
 
 function Player(){
@@ -256,6 +272,16 @@ function Player(){
     this.score = 0;
     this.ownAnimal = new Array(0);
     this.color = new Array(3);
+    this.nameF = {
+        'meat': '食肉',
+        'hide': '伪装',
+        'eye': '锐目',
+        'water': '水生',
+        'run': '擅跑',
+        'home': '穴居',
+        'poison': '有毒',
+        'fat': '脂肪'
+    };
 
     this.showHand = function(){
         var td = $('.handcard td');
@@ -290,9 +316,17 @@ function Player(){
     this.drawCard = function(n){
         for (var i = 0; i < n; i++)
         {
-            this.hand.push(game.deck.pop());
-            this.handState[this.hand.size] = 1;
-            this.hand.size++;
+            if (game.deck.length)
+            {
+                this.hand.push(game.deck.pop());
+                this.handState[this.hand.size] = 1;
+                this.hand.size++;
+            }
+            else
+            {
+                game.end = 1;
+                break;
+            }
         }
     };
 
@@ -305,7 +339,6 @@ function Player(){
         DrawAnimal(x, y);
         //main.context.putImageData(AnimalList.imageData[0], 90, 90);
         //main.context.drawImage(AnimalList.image[newAnimal.type], x, y);
-        
         //var path = new Path2D();
         //path.addPath();
         //path.moveTo(x, y);
@@ -321,7 +354,9 @@ function Player(){
         //main.context.fillStyle = "rgba(0,0,0,0.3)";
         //main.context.fillRect(newAnimal.locX, newAnimal.locY, newAnimal.width, newAnimal.height + 20);
         this.ownAnimal[this.ownAnimal.size - 1] = newAnimal;
-        console.log('玩家 ' + game.now + ' 繁殖出了一个新的生命...')
+
+        console.log('玩家 ' + game.now + ' 繁殖出了新生命...')
+        Board.addText('玩家 ' + game.now + ' 繁殖出了新生命...', game.now);
     };
 
     this.inAnimal = function(x, y){
@@ -347,8 +382,12 @@ function Player(){
         this.ownAnimal[n].ability.size++;
         this.ownAnimal[n].ability.push(ability);
         this.ownAnimal[n].state[ ability ] = true;
+        if (ability === 'meat' || ability === 'big')
+            this.ownAnimal[n].foodNeed++;
         mapCmd.mode1(game.now, n);
+
         console.log('玩家 ' + game.now + ' 成功为他的动物 ' + n + ' 进化了一个能力...');
+        Board.addText('玩家 ' + game.now + ' 的动物进化了' + this.nameF[ability] + '...', game.now);
         //console.log(this.ownAnimal[n].ability[0]);
         //console.log(ability + ' ' + this.ownAnimal[n].state[ ability ]);
         return true;

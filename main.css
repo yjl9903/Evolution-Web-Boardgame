@@ -29,6 +29,9 @@ h1{text-align: center;}
 .temp-canvas{
     position: absolute; z-index: 0;
 }
+.board-canvas{
+    position: absolute; z-index: -10;
+}
 
 .handcard-div{width: 1200px; height: 70px; margin: 0 auto; /*border: 3px black solid;*/} 
 .handcard{margin: -20px 100px 0 0; height: 70px; width: 750px; position: absolute; left: 20%; bottom: 0px; border: 2px black solid;}

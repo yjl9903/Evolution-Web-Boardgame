@@ -45,10 +45,14 @@ var AnimalList = function(){
     AnimalList.image = new Array(10);
     AnimalList.imageData = new Array(10);
     AnimalList.name = {
-        'water': '水生',
+        'meat': '食肉',
         'hide': '伪装',
-        'eye': '锐利眼神',
-        'run': '擅跑'
+        'eye': '锐目',
+        'water': '水生',
+        'run': '擅跑',
+        'home': '穴居',
+        'poison': '有毒',
+        'fat': '脂肪'
     };
 };
 

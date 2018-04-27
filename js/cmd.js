@@ -25,7 +25,7 @@ var handCardCmd = function(mode){
         var tot = $(this);
         var i = tot.index();
         var img;
-        console.log(game.now);
+        //console.log(game.now);
         if (game.p[game.now].handState[i] !== -1)
             tot.css('cursor', 'pointer');
         else
@@ -280,6 +280,7 @@ var foodCmd = function(mode){
                         main.markContext.clearRect(markX, markY - 20, 20 ,20);
                         main.markContext.fillText(game.p[tn].ownAnimal[tm].totFood, markX, markY);
                         game.pFlag[game.now] = 1;
+                        Board.addText('玩家 ' + game.now + ' 的动物吃掉了食物...', game.now);
                     }
                     else
                     {
@@ -325,6 +326,10 @@ var foodCmd = function(mode){
             });
         }
     });
+};
+
+var attackCmd = function(mode){
+
 };
 
 var drag = {
