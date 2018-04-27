@@ -38,7 +38,7 @@ var handCardCmd = function(mode){
         else
             return;
         //读取该位置的卡片图片
-        main.context2.drawImage(img, totRect.left - rect.left - 36, 585 - 120 - rect.top - 120);
+        main.context2.drawImage(img, totRect.left - rect.left - 36, 585 - 100 - rect.top - 120);
         //main.context.drawImage(CardDeck.image2[1], 600, 0);
     };
     var mLeave = function(){
@@ -46,7 +46,7 @@ var handCardCmd = function(mode){
         var totRect = tot[0].getBoundingClientRect();
         var i = tot.index();
         tot.css('cursor', '');
-        main.context2.clearRect(totRect.left - rect.left - 36, 585 - 120 - rect.top - 120, 155, 240);
+        main.context2.clearRect(totRect.left - rect.left - 36, 585 - 120 - rect.top - 100, 155, 240);
     };
     td.mouseenter(mEnter);
     td.mouseleave(mLeave);
