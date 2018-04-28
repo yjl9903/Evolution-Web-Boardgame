@@ -4,15 +4,15 @@ var CardDeck = function(){
     CardDeck.image = new Array(20);  //原图
     CardDeck.image2 = new Array(20);  //缩略图，154 * 240
     CardDeck.srcDeck = new Array(
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 
-        3, 3, 3, 3, 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        2, 2, 2,
+        3, 3, 3, 
         4, 4, 4, 4, 4, 4, 
-        5, 5, 5, 5, 
-        6, 6, 6, 6,
-        7, 7, 7, 7,
-        8, 8, 8, 8,
-        9, 9, 9, 9
+        5, 5, 5, 
+        6, 6, 6,
+        7, 7, 7,
+        8, 8, 8,
+        9, 9, 9,
     );
     //CardDeck.abilityList = new Array('');
     //0: posionous
