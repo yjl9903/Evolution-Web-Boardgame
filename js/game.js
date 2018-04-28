@@ -477,7 +477,12 @@ function Player(){
         }
 
         var left = 26 - 3 * (this.hand.size - 6);
+        if (this.hand.size > 6)
+            left +=  (this.hand.size - 6);
+        if (this.hand.size > 8)
+            left -= this.hand.size - 6;
         $('.handcard').css('left', left + '%');
+        
         /*for (var i = 0; i < this.hand.size; i++)
         {
             //console.log(this.hand[i]);

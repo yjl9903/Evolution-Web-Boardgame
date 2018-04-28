@@ -456,6 +456,8 @@ var attackCmd = function(mode){
                         main.markContext.clearRect(markX, markY - 20, 20 ,20);
                         if (game.p[n].ownAnimal[m].totFood)
                             main.markContext.fillText(game.p[n].ownAnimal[m].totFood, markX, markY);
+                        //切换玩家
+                        game.switch(1);
                     }
                 }
                 else if (game.isOver3(mx, my, 90, 90, n, m) && food.isOver(mx, my, 90, 90))
