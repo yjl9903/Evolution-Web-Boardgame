@@ -32,7 +32,7 @@ var game = function(){
                 textEnter(curText, 500, 530, 2000, 30, 4, main.textContext);
                 button.attr('disabled', true);  //设置按钮无法点击
                 button.off();
-                game.step[cnt]();
+                game.step[1]();
             }
             else
             {
@@ -71,7 +71,7 @@ var game = function(){
                 button.attr('disabled', true);  //设置按钮无法点击
                 button.off();
                 cnt++;
-                game.step[cnt]();
+                game.step[2]();
             }
             else
             {
@@ -135,7 +135,6 @@ var game = function(){
         game.now = game.first;
         main.clear();
         main.infoContext.clearRect(0, 0, 1200, 600);
-
         textEnter(topText, 600, 50, 2000, 30, 4, main.textContext);
         main.textContext.clearRect(380, 70, 430, 90);
         topText = "消亡阶段...";
@@ -147,7 +146,7 @@ var game = function(){
             {
                 if (game.p[i].ownAnimal[j].totFood < game.p[i].ownAnimal[j].foodNeed)
                 {
-                    Board.addText('玩家' + i + '的动物饿死了...', i);
+                    Board.addText('玩家 ' + i + ' 的动物饿死了...', i);
                     animalDie(i, j);
                     game.p[i].ownAnimal.splice(j, 1);
                     game.p[i].ownAnimal.size--;
@@ -155,7 +154,7 @@ var game = function(){
                 }
                 else if (game.p[i].ownAnimal[j].inPoison)
                 {
-                    Board.addText('玩家' + i + '的动物中毒了...', i);
+                    Board.addText('玩家 ' + i + ' 的动物中毒了...', i);
                     animalDie(i, j);
                     game.p[i].ownAnimal.splice(j, 1);
                     game.p[i].ownAnimal.size--;
@@ -171,10 +170,15 @@ var game = function(){
         }
         for (var i = 0; i < playerNum; i++)
         {
-            game.p[i].drawCard(game.p[i].ownAnimal.size + 1);
+            var cnt = game.p[i].drawCard(game.p[i].ownAnimal.size + 1);
             if (game.p[i].ownAnimal.size === 0 && game.p[i].hand.size === 0)
-                game.p[i].drawCard(5);
+            {
+                cnt += game.p[i].drawCard(5);
+            }
+            Board.addText('玩家 ' + i + ' 抓到了' + cnt + '张牌...', i);
         }
+        Board.addText('牌库还剩' + game.deck.length + '张牌...');
+
         curText = "点击下回合...";
         textEnter(curText, 500, 530, 2000, 30, 3, main.textContext);
         var button = $('.next-turn');
@@ -190,6 +194,8 @@ var game = function(){
 
             if (game.end === 1)
             {
+                console.log(game.end);
+                Board.addText('小行星即将来袭...');
                 game.end = 2;
                 cnt = 0;
                 game.step[cnt]();
@@ -197,7 +203,7 @@ var game = function(){
             }
             else if (game.end === 2)
             {
-
+                game.over();
             }
             else
             {
@@ -419,7 +425,7 @@ var game = function(){
         for (var i = 0; i < playerNum; i++)
         {
             score[i] = 0;
-            for (var j = 0; j < game.p[i].ownAnimal.size; i++)
+            for (var j = 0; j < game.p[i].ownAnimal.size; j++)
             {
                 score[i] += 2;
                 for (var k = 0; k < game.p[i].ownAnimal[j].ability.size; k++)
@@ -435,16 +441,19 @@ var game = function(){
                 maxN = i;
             }
         }
-        main.context.fillText('小行星来袭', 600, 260);
-        main.context.font = "50px Microsoft YaHei";
+        textEnter('小行星来袭', 600, 270, 300, 80, 0, main.context2, 31, 31, 31);
+        //main.context.fillText('小行星来袭', 600, 260);
+        
         for (var i = 0; i < playerNum; i++)
         {
+            main.context.font = "40px Microsoft YaHei";
             var text = '';
             if (i === maxN)
                 text = '☆ ';
             text += "玩家 " + i + " : " + score[i];
             main.context.fillStyle = "rgba(" + game.p[i].color[0] + ',' + game.p[i].color[1] + ',' + game.p[i].color[2] + ',1)';
-            main.context.fillText(text, 600, 360 + 60 * i);
+            //main.context.fillText(text, 600, 360 + 60 * i);
+            textEnter(text, 600, 360 + 60 * i, 300, 40, 0, main.context, game.p[i].color[0], game.p[i].color[1], game.p[i].color[2]);
         }
     };
 };
@@ -505,6 +514,7 @@ function Player(){
     };
 
     this.drawCard = function(n){
+        var cnt = 0;
         for (var i = 0; i < n; i++)
         {
             if (game.deck.length)
@@ -514,14 +524,19 @@ function Player(){
                     this.hand.push(game.deck.pop());
                     this.handState[this.hand.size] = 1;
                     this.hand.size++;
+                    cnt++;
                 }
             }
             else
             {
-                game.end = 1;
+                if (game.end === 0)
+                    game.end = 1;
                 break;
             }
         }
+        if (game.deck.length === 0 && game.end === 0)
+            game.end = 1;
+        return cnt;
     };
 
     this.initAnimal = function(x, y){

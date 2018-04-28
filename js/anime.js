@@ -174,15 +174,15 @@ function initFoodAnimation(n){
     var cnt, rand, t = 0;
     if (n === 2)
         rand = function(){
-            return 2 + random(1, 7);
+            return 2 + random(1, 6);
         };
     else if (n === 3)
         rand = function(){
-            return random(1, 7) + random(1, 7);
+            return random(1, 6) + random(1, 6);
         };
     else
         rand = function(){
-            return 2 + random(1, 7) + random(1, 7);
+            return 2 + random(1, 6) + random(1, 6);
         };
     
     var content1 = '这个月，大地上新生了 ', content2 = ' 份食物...';
@@ -215,7 +215,11 @@ function Board(){
 
     Board.addText = function(str, n){
         //console.log(n);
-        var dx = 0, sum = 30, tot = 0, color = 'rgba(' + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',';
+        var dx = 0, sum = 30, tot = 0, color;
+        if (typeof n !== "undefined")
+            color = 'rgba(' + game.p[n].color[0] + ',' + game.p[n].color[1] + ',' + game.p[n].color[2] + ',';
+        else
+            color = 'rgba(51, 51, 51, 0.9)';
         (function animate5(){
             //console.log(color[0]);
             //fillRect(900, 440, 300, 145);
