@@ -373,9 +373,9 @@ var attackCmd = function(mode){
                     mx = mx - game.p[n].ownAnimal[m].width / 2;
                     my = my - game.p[n].ownAnimal[m].height / 2;
                     
-                    var markX = game.p[n].ownAnimal[m].locX;
+                    var markX = game.p[n].ownAnimal[m].locX - 10;
                     var markY = game.p[n].ownAnimal[m].locY + 30;
-                    main.markContext.clearRect(markX, markY - 20, 20 ,20);
+                    main.markContext.clearRect(markX, markY - 20, 40 ,20);
                     main.context.clearRect(nx, ny, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     //main.context.clearRect(fx, fy, game.p[n].ownAnimal[m].width, game.p[n].ownAnimal[m].height + 13);
                     //console.log(mx + ' ' + my);
@@ -415,6 +415,7 @@ var attackCmd = function(mode){
                         //目标动物死亡-----------
                         //main.context2.fillRect(game.p[tagN].ownAnimal[tagM].locX, game.p[tagN].ownAnimal[tagM].locY, game.p[tagN].ownAnimal[tagM].width, game.p[tagN].ownAnimal[tagM].height + 13);
                         animalDie(tagN, tagM);
+                        main.markContext.clearRect(game.p[tagN].ownAnimal[tagM].locX, game.p[tagN].ownAnimal[tagM].locY + 10, 20 ,20);
                         game.p[tagN].ownAnimal.splice(tagM, 1);
                         game.p[tagN].ownAnimal.size--;
                         //绘制动物------------

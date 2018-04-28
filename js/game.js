@@ -334,6 +334,8 @@ var game = function(){
     };
 
     game.isEat = function(own, tag){
+        if (own.totFood === own.foodNeed)
+            return false;
         if (own.state['meat'])
         {
             var flag = 0;
