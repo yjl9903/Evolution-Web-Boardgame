@@ -81,14 +81,16 @@ var main = function(){
     //cardImage[0].onload = function(){context.drawImage(cardImage[0], 0, 0, 77, 120);}
     //textEnter("1111111", 300, 300, 100, 50, 3);
 
-
+    //textEnter('加载ing...', 600, 300, 300, 60, 0, main.context, 31, 31, 31);
+    main.tempContext.font = "60px "
+    main.tempContext.fillText('加载ing...', 600, 300);
     if (Loader.loaded){
         //$('.handcard td').html('<img src="image/paibei.jpg" width="77px" height="120px" ondragstart="return false;"/>');
         //context.drawImage(cardImage[0], 0, 0, 77, 120);
         //handCard(canvas);
         //drag.animate();
         //DrawFood(0, 0);
-        
+        main.context.clearRect(0, 0, 1200, 600);
         game.set();
     }
     else{
@@ -105,6 +107,7 @@ var main = function(){
             //Board.addText('1');
             //main.context.drawImage(AnimalList.image[0], 0, 0, 90, 90);
             //main.context.fillRect(900, 440, 300, 145);
+            //main.context.clearRect(0, 0, 1200, 600);
             game.set();
         };
     }

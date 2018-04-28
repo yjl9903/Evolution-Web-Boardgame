@@ -1,6 +1,6 @@
 var game = function(){
     var curText = ' ', topText = ' ';
-    var playerNum = 2, foodNum = 0;
+    var playerNum = 3, foodNum = 0;
     var cnt = 0;
     game.now = 0;
     game.first = 0;

@@ -189,7 +189,7 @@ function initFoodAnimation(n){
     (function animate1(){
         //main.textContext.clearRect(0, 400, 1200, 200);
         cnt = rand();
-        main.textContext.clearRect(380, 70, 430, 90);
+        main.textContext.clearRect(350, 70, 490, 150);
         main.textContext.fillText(content1 + cnt + content2, 600, 100);
         t++;
         if (t < 125)
