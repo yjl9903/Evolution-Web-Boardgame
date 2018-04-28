@@ -369,6 +369,7 @@ var game = function(){
             if (tag.state['run'])
             {
                 var x = random(1, 6);
+                Board.addText('玩家 ' + tag.father + ' 掷出了' + x + '...', tag.father);
                 if (x < 4)
                     flag += 1;
             }
