@@ -42,12 +42,15 @@ body{
     position: absolute; z-index: 10;
     width: 200px; height: 120px; background-color: aliceblue;
     right: 4.6%; padding: 30px;
+    box-shadow: 3px 3px 5px #888888;
 }
 .set-menu1{height: 50px;}
 .set-menu select{width: 50px; height: 30px;}
 .set-menu .set-button{width: 40px; height: 25px; float: right;}
 .set-menu .log-button{width: 40px; height: 25px; float: right;}
 .set-menu p{width: 100px; height: 25px; margin-top: 20px;}
+
+.playerInfo{position: absolute; z-index: 5; font-size: 25px; color: rgb(94, 97, 89); right: 12%; top: 9%;}
 
 .game-div{margin: 0 auto; width: 1200px; height: 600px; border: 2px solid green; position:relative;}
 .game-div2{width: 1200px; height: 600px; /*border: 2px yellowgreen solid;*/}
@@ -94,6 +97,7 @@ body{
 .next-turn{
     position: absolute; z-index: 10; right: 10%;
     width: 100px; height: 40px;  margin-right: 100px; margin-top: 15px; cursor: pointer;
+    display: none;
 }
 .next-player{
     position: relative; display: none;

@@ -33,11 +33,10 @@
         </div>
         <div class="set-menu" >
             <div class="set-menu1">
-                玩家人数：<select class="playerID">
-                    <option value = "0">0</option>
-                    <option value = "1">1</option>
+                玩家人数：<select class="playerNum">
                     <option value = "2">2</option>
                     <option value = "3">3</option>
+                    <option value = "4">4</option>
                 </select>
                 <input type="button" value="设置" class="set-button"/>
             </div>
@@ -53,6 +52,7 @@
             <p>等待游戏中...</p>
         </div>
         <div>
+            <p class="playerInfo"></p>
             <div class="game-div" style="margin: 0 auto;">
                 <div class="game-div2">
                     <div class="food-div">
@@ -85,32 +85,31 @@
 
     <script>
         $(document).ready(function(){
+            let timeout = null;
             var menu = $('.set-menu');
             var set = $('.set');
             var flag = false;
             menu.hide();
             set.mouseenter(function(){
-                menu.slideToggle();
+                menu.slideDown("fast");
             });
             set.mouseleave(function(){
-                clearTimeout();
+                clearTimeout(timeout);
                 flag = false;
-                setTimeout(function(){
+                timeout = setTimeout(function(){
                     if (!flag)
-                        menu.slideToggle();
-                }, 300);
+                        menu.slideUp("fast");
+                }, 100);
             });
             menu.mouseenter(function(){
-                clearTimeout();
+                clearTimeout(timeout);
                 flag = true;
                 //console.log(1);
             });
             menu.mouseleave(function(){
-                menu.slideToggle();
+                menu.slideUp("fast");
             });
-            
         });
-        
     </script>
 </body>
 </html>
